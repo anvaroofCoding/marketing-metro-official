@@ -121,10 +121,10 @@ const Dashboard = () => {
 
               // summa bo‘yicha yulduzcha sonini aniqlash
               const getStarsBySumma = (sum) => {
-                if (sum < 10000000) return 1;
-                if (sum < 20000000) return 2;
-                if (sum < 30000000) return 3;
-                if (sum < 40000000) return 4;
+                if (sum < 1200000000) return 1;
+                if (sum < 1500000000) return 2;
+                if (sum < 1700000000) return 3;
+                if (sum < 2000000000) return 4;
                 return 5;
               };
 
