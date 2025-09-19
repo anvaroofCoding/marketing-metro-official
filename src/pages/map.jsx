@@ -18,7 +18,7 @@ export default function Map() {
     const fetchStations = async () => {
       try {
         const response = await fetch(
-          "http://192.168.10.41:9000/api/stations/",
+          "https://reklama-project.onrender.com/api/stations/",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem(
