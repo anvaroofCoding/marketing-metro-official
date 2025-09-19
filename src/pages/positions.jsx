@@ -177,7 +177,7 @@ export default function AdvertisementDetail() {
                   <div className="relative">
                     <Image
                       src={reklama.photo || "/placeholder.svg"}
-                      width={120}
+                      width={200}
                       height={120}
                       alt="reklama rasmi"
                       className="rounded-xl border-4 border-white/20 shadow-lg"
