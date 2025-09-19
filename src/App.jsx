@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./components/sidebar";
 import { useGetAuthQuery } from "./services/api";
 import { message } from "antd";
@@ -7,6 +7,7 @@ import { useEffect } from "react";
 const App = () => {
   const location = useLocation();
   const { data, isLoading, error } = useGetAuthQuery();
+  const navigate = useNavigate();
   useEffect(() => {
     if (isLoading) {
       const lastShown = localStorage.getItem("token_check_success");
@@ -50,7 +51,7 @@ const App = () => {
 
   const tokens = localStorage.getItem("token_marketing");
   if (!tokens) {
-    window.location.href = "/login";
+    navigate("/login");
   }
   return (
     <div className="flex roboto">
