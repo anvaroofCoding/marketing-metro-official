@@ -95,7 +95,7 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        "https://reklamaproject.onrender.com/api/token/",
+        "https://reklamaproject.onrender.com/api/token",
         {
           method: "POST",
           headers: {
