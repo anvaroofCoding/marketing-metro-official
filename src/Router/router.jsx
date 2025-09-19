@@ -1,5 +1,5 @@
 import App from "@/App";
-import LoginPage from "@/Auth/login";
+import Login from "@/Auth/login";
 import Archive from "@/pages/archive";
 import ShowArchive from "@/pages/archive-dails";
 import Dashboard from "@/pages/dashboard";
@@ -40,5 +40,5 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  { path: "/login", element: <LoginPage /> },
+  { path: "/login", element: <Login /> },
 ]);
