@@ -94,16 +94,19 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://192.168.10.41:9000/api/token/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
+      const response = await fetch(
+        "https://reklamaproject.onrender.com/api/token/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
