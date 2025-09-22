@@ -32,7 +32,6 @@ export default function Delay7() {
       </div>
     );
   }
-  console.log(data);
   if (EndError) {
     notification.error({ message: "Ma'lumotlarni yuklashda xatolik" });
   }

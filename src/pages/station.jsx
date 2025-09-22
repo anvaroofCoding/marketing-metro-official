@@ -67,7 +67,6 @@ export default function StationDetail() {
     limit: pageSize,
     search: value,
   });
-  console.log(station);
 
   const [createPosition, { isLoading: createLoding, error: createError }] =
     useCreatePositionMutation();
@@ -156,7 +155,6 @@ export default function StationDetail() {
     notification.success({ message: "Excel muvaffaqiyatli ko'chirildi" });
   }
 
-  console.log(station);
   return (
     <div className="w-full h-full p-2 flex flex-col gap-3">
       {/* Header qismi */}

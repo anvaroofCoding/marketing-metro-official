@@ -41,7 +41,6 @@ const App = () => {
       return () => clearInterval(interval);
     }
   }, [error]);
-  console.log(data);
 
   // boshidagi va oxiridagi / belgilardan tozalab olamiz
   const path = location.pathname.replace(/^\/|\/$/g, "");
