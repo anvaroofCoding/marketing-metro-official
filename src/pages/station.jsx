@@ -137,8 +137,10 @@ export default function StationDetail() {
       });
       refetch();
     } catch (err) {
-      notification.error({ message: "PDF yangilashda xatolik yuz berdi!" });
-      console.log(err);
+      notification.error({
+        message: "PDF yangilashda xatolik yuz berdi!",
+        description: err,
+      });
     }
   };
 

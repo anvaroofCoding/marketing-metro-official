@@ -429,7 +429,7 @@ const Dashboard = () => {
           </div>
           <h2 className="text-2xl font-bold text-slate-800">
             Metropolitenda eng ko'p reklamasi bor bekatlar
-          </h2> 
+          </h2>
         </div>
 
         <div className="relative overflow-hidden bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-lg p-6">

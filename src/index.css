@@ -415,3 +415,6 @@
 .expired-row {
   background-color: #eb7575 !important; /* qizil fon */
 }
+.custom-notification {
+  background-color: rgba(255, 255, 255, 0.05) !important; /* bg-white/5 */
+}

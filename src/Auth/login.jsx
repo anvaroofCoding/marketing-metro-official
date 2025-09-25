@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { message, notification } from "antd";
 import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -93,6 +94,12 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
+    notification.config({
+      placement: "top",
+      duration: 3,
+      className: "custom-notification",
+    });
+
     try {
       const response = await fetch(
         "https://reklama-project.onrender.com/api/token/",
@@ -113,8 +120,10 @@ export default function Login() {
         localStorage.setItem("token_marketing", data.access);
         navigate("/");
       } else {
-        console.error("Login failed");
-        // Handle login error here
+        notification.error({
+          message: "Login yoki parolingiz xato!",
+          description: "Iltimos qaytadan kiriting!",
+        });
       }
     } catch (error) {
       console.error("Network error:", error);
