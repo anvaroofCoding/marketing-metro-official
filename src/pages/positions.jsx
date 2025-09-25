@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DeleteOutlined,
   EditOutlined,
@@ -73,9 +71,7 @@ export default function AdvertisementDetail() {
       </div>
     );
 
-  const reklama = data?.results?.find(
-    (item) => String(item.position) === String(ids)
-  );
+  const reklama = data?.results?.find((item) => item.position == ids);
 
   const handleOpen = () => {
     if (reklama) {
@@ -90,6 +86,7 @@ export default function AdvertisementDetail() {
     setOpen(true);
   };
 
+  // add shartnoma qoshish
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
@@ -128,12 +125,12 @@ export default function AdvertisementDetail() {
       if (reklama) {
         await updateAdvent({ id: reklama.id, formData }).unwrap();
         notification.success({
-          message: "Muvaffaqiyatli yangilandi",
+          message: "Ma'lumotlar muvaffaqiyatli yangilandi",
         });
       } else {
         await createAdvent(formData).unwrap();
         notification.success({
-          message: "Muvaffaqiyatli qo'shildi",
+          message: "Ma'lumotlar muvaffaqiyatli to'ldirildi",
         });
       }
 
@@ -141,20 +138,22 @@ export default function AdvertisementDetail() {
       setOpen(false);
       form.resetFields();
     } catch (error) {
-      console.error("Xatolik yuz berdi:", error);
-      notification.error({ message: "Xatolik yuz berdi" });
+      notification.warning({
+        message: `Diqqat ${error.data.photo}`,
+        description: "Iltimos reklama rasmini qayta yuborishingiz shart!",
+      });
     }
   };
 
+  // delete - ya'ni shartnomani tugatish
   const handleDelete = async (id) => {
     try {
       await deleteAdvent(id).unwrap();
       notification.success({
-        message: "Reklama o'chirildi",
+        message: "Shartnoma muvaffaqiyatli yakunlandi",
       });
       refetch();
     } catch (err) {
-      console.error(err);
       notification.error({
         message: "Xatolik yuz berdi",
         description: err?.data?.message || JSON.stringify(err),
@@ -167,10 +166,7 @@ export default function AdvertisementDetail() {
       {reklama ? (
         <div>
           {/* Header Card with Action Buttons */}
-          <Card
-            className="mb-6  border-0 rounded-2xl overflow-hidden"
-            bodyStyle={{ padding: 0 }}
-          >
+          <Card className="mb-6  border-0 rounded-2xl overflow-hidden">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8">
               <div className="flex justify-between items-center">
                 <div className="flex gap-6 items-center">
@@ -250,10 +246,6 @@ export default function AdvertisementDetail() {
             <Card
               title="Shartnoma ma'lumotlari"
               className="shadow-md rounded-xl border-0 "
-              headStyle={{
-                backgroundColor: "#f8fafc",
-                borderRadius: "12px 12px 0 0",
-              }}
             >
               <Space direction="vertical" className="w-full" size="middle">
                 <div>
@@ -306,10 +298,6 @@ export default function AdvertisementDetail() {
             <Card
               title="Moliyaviy ma'lumotlar"
               className="shadow-md rounded-xl border-0"
-              headStyle={{
-                backgroundColor: "#f8fafc",
-                borderRadius: "12px 12px 0 0",
-              }}
             >
               <Space direction="vertical" className="w-full" size="middle">
                 <div>
@@ -350,10 +338,6 @@ export default function AdvertisementDetail() {
             <Card
               title="Aloqa ma'lumotlari"
               className="shadow-md rounded-xl border-0"
-              headStyle={{
-                backgroundColor: "#f8fafc",
-                borderRadius: "12px 12px 0 0",
-              }}
             >
               <Space direction="vertical" className="w-full" size="middle">
                 <div>
@@ -440,7 +424,7 @@ export default function AdvertisementDetail() {
         onCancel={() => setOpen(false)}
         okText="Saqlash"
         cancelText="Bekor qilish"
-        width={700}
+        width={800}
         className="top-8"
         okButtonProps={{
           size: "large",

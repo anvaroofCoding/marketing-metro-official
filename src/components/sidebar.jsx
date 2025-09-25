@@ -222,9 +222,10 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`h-screen  bg-[#1777FF] border-r border-gray-800 flex flex-col transition-all  duration-300 ${
-        collapsed ? "w-20" : "w-85"
-      }`}
+      className={`h-screen  bg-[#1777FF]   
+             flex flex-col transition-all  duration-300 ${
+               collapsed ? "w-20" : "w-85"
+             }`}
     >
       {/* Header */}
       <div className="p-6 flex justify-between items-center">

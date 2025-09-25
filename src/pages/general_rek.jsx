@@ -114,7 +114,12 @@ export default function Allsearch() {
             total: data?.count,
             onChange: (p) => setPage(p),
           }}
-          scroll={{ x: "max-content" }} // kichik ekranlarda horizontal scroll
+          scroll={{ x: "max-content" }}
+          rowClassName={(record) => {
+            const now = new Date();
+            const endDate = new Date(record.Shartnoma_tugashi);
+            return endDate < now ? "expired-row" : "";
+          }}
         >
           <ColumnGroup>
             {/* <Column title="ID" dataIndex="id" key="id" responsive={["sm"]} /> */}
