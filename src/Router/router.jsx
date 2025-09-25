@@ -1,5 +1,6 @@
 import App from "@/App";
 import Login from "@/Auth/login";
+import AboutProgram from "@/pages/about-program";
 import Archive from "@/pages/archive";
 import ShowArchive from "@/pages/archive-dails";
 import Dashboard from "@/pages/dashboard";
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
       { path: "/delay7/", element: <Delay7 /> },
       { path: "/delaysEnd/", element: <DelayEnd /> },
       { path: "/map/", element: <Map /> },
+      { path: "/dastur-haqida", element: <AboutProgram /> },
       { path: "/umumiy-qidiruv/", element: <Allsearch /> },
       { path: "/umumiy-qidiruv/:ida", element: <GenerelSearchDETAILS /> },
       { path: "/station/:id/", element: <StationDetail /> },

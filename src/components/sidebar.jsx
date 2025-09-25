@@ -46,7 +46,7 @@ export default function Sidebar() {
       icon: <Home size={20} />,
       label: (
         <div className="flex justify-between items-center w-full">
-          <span>Bosh sahifa</span>
+          <span>Dashboard</span>
         </div>
       ),
     },
@@ -139,6 +139,15 @@ export default function Sidebar() {
           ),
         },
       ],
+    },
+    {
+      key: "/dastur-haqida",
+      icon: <Home size={20} />,
+      label: (
+        <div className="flex justify-between items-center w-full">
+          <span>Dastur haqida</span>
+        </div>
+      ),
     },
   ];
 

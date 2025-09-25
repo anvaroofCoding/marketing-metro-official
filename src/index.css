@@ -418,3 +418,13 @@
 .custom-notification {
   background-color: rgba(255, 255, 255, 0.05) !important; /* bg-white/5 */
 }
+.ant-table-bordered .ant-table-container {
+  border: 2px solid #d9d9d9; /* tashqi border */
+}
+
+.ant-table-bordered .ant-table-cell {
+  border: 1px solid #bfbfbf; /* ichki cell border */
+}
+.ant-table-bordered .ant-table-cell {
+  @apply border border-gray-400;
+}

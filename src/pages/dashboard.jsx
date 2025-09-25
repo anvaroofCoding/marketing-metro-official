@@ -16,6 +16,7 @@ import {
   ActivityIcon,
   TargetIcon,
   ZapIcon,
+  BadgeCheck,
 } from "lucide-react";
 import { Spin } from "antd";
 
@@ -132,12 +133,9 @@ const Dashboard = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-indigo-600/10 animate-pulse"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="relative z-10">
-          <h1 className="font-bold text-4xl text-white mb-2 animate-fade-in">
+          <h1 className="font-bold text-4xl text-white animate-fade-in">
             Reklamalar Statistikasi
           </h1>
-          <p className="text-blue-200 text-lg animate-fade-in-delay">
-            Hozirgi vaqtdagi reklama statistikasi va tahlil
-          </p>
         </div>
       </div>
 
@@ -216,12 +214,22 @@ const Dashboard = () => {
       <div className="px-4 grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
         {/* Enhanced Top Performing Ads with Infinite Vertical Scroll */}
         <div className="space-y-6">
+          <div
+            className="absolute inset-0 
+             bg-[url('/naqshtitle.png')] 
+             bg-repeat 
+             bg-center 
+             bg-[length:400px_400px] 
+             opacity-20
+             pointer-events-none
+             z-0"
+          ></div>
           <div className="flex items-center space-x-3 mb-6">
             <div className="p-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg">
               <StarIcon className="w-6 h-6 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-slate-800">
-              Shartnoma qimati eng yuqori reklamalar
+              Shartnoma qimati eng yuqori top 5ta tashkilot
             </h2>
           </div>
 
@@ -363,7 +371,7 @@ const Dashboard = () => {
               <PlayCircleIcon className="w-6 h-6 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-slate-800">
-              Top Reklama Fotosuratlari
+              Top Reklamalar
             </h2>
           </div>
 
@@ -428,7 +436,7 @@ const Dashboard = () => {
             <MapPinIcon className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-slate-800">
-            Metropolitenda eng ko'p reklamasi bor bekatlar
+            Metropolitenda eng ko'p reklamaga ega top 10ta bekatlar
           </h2>
         </div>
 
@@ -458,7 +466,9 @@ const Dashboard = () => {
                       </h3>
                       <div className="mt-2">
                         <span className="inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 rounded-full shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                          <span className="mr-2">🎯</span>
+                          <span className="mr-2">
+                            <BadgeCheck />
+                          </span>
                           {items.total} ta reklama
                         </span>
                       </div>
@@ -491,7 +501,7 @@ const Dashboard = () => {
             ))}
 
             {/* Duplicate set for seamless loop */}
-            {StatistikData?.top_5_stations?.map((items, index) => (
+            {StatistikData?.top_5_stations?.map((items) => (
               <div
                 key={`second-${items.id}`}
                 className="group relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden flex-shrink-0 w-80"
@@ -511,7 +521,9 @@ const Dashboard = () => {
                       </h3>
                       <div className="mt-2">
                         <span className="inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 rounded-full shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                          <span className="mr-2">🎯</span>
+                          <span className="mr-2">
+                            <BadgeCheck />
+                          </span>
                           {items.total} ta reklama
                         </span>
                       </div>
