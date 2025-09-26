@@ -69,6 +69,7 @@ export default function EditTashkilod() {
         }
         setFile(null);
       }}
+      style={{ top: "50%", transform: "translateY(-50%)" }}
       onOk={() => form.submit()}
       okText="Ijarchini saqlash"
       cancelText="Bekor qilish"

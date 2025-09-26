@@ -58,6 +58,7 @@ export default function PostTashkilot() {
   return (
     <Modal
       title="Ijarachi qo'shish"
+      style={{ top: "50%", transform: "translateY(-50%)" }}
       open={isOpen}
       onCancel={() => {
         dispatch(closeModal());

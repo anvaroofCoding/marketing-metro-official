@@ -1,6 +1,11 @@
 "use client";
 
-import { EyeFilled, PlusCircleFilled, SearchOutlined } from "@ant-design/icons";
+import {
+  EyeFilled,
+  PlusCircleFilled,
+  SearchOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Form,
@@ -9,9 +14,10 @@ import {
   Modal,
   Spin,
   Tooltip,
+  Upload,
   notification,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useGetTashkilodQuery,
@@ -28,9 +34,11 @@ export default function TashkilotImproved() {
     duration: 3,
   });
 
+  const [editingId, setEditingId] = useState(null);
   const [updateTashkilod, { isLoading }] = useUpdateTashkilodMutation();
   const [file, setFile] = useState(null);
   const [value, setValue] = useState("");
+  const [preview, setPreview] = useState(null);
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -42,42 +50,54 @@ export default function TashkilotImproved() {
     }
   );
 
-  const EditValues = async (value) => {
+  const EditValues = async (values) => {
     const formData = new FormData();
-    formData.append("name", value.name);
-    formData.append("contact_number", value.contact_number);
+    formData.append("name", values.name);
+    formData.append("contact_number", values.contact_number);
     if (file) {
       formData.append("logo", file, file.name);
     }
 
     try {
-      await updateTashkilod({ id: editingId, body: formData }).unwrap();
-      notification.success({ message: "Ijarachi muvaffaqiyatli yangilandi" });
-      dispatch(closeModalEdit());
+      await updateTashkilod({ id: editingId, formData }).unwrap();
+      notification.success({ message: "Ma'lumot muvaffaqiyatli tahrirlandi" });
+      setOpen(false);
       form.resetFields();
       setFile(null);
       setPreview(null);
-    } catch (error) {
-      notification.error({ message: "Xatolik", description: error?.data });
+    } catch (err) {
+      console.error("Update error:", err);
+      notification.error({
+        message: "Xatolik yuz berdi",
+        description: err?.data,
+      });
     }
   };
 
+  const handleUpload = (fileObj) => {
+    const url = URL.createObjectURL(fileObj);
+    setPreview(url);
+    setFile(fileObj);
+    return false;
+  };
+
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
   if (positionsLoading) {
     return (
-      <div className="w-full h-screen flex justify-center items-center bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="text-center">
-          <Spin size="large" />
-          <p className="mt-4 text-gray-600 font-medium">
-            Tashkilotlar yuklanmoqda...
-          </p>
-        </div>
+      <div className="w-full h-screen flex justify-center items-center ">
+        <Spin size="large" />
       </div>
     );
   }
 
   return (
     <div className="w-full min-h-screen">
-      <div className="max-w-7xl mx-auto p-6">
+      <div className=" mx-auto p-6">
         {/* Enhanced Header */}
         <div className="mb-8">
           <div className="text-center mb-6">
@@ -148,7 +168,7 @@ export default function TashkilotImproved() {
                     <div className="flex-1 min-w-0">
                       <div className="mb-2">
                         <h3 className="font-bold text-gray-900 text-lg  mb-2 ">
-                          {record.name.substring(0, 15)}...
+                          {record.name.substring(0, 20)}...
                         </h3>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -207,7 +227,15 @@ export default function TashkilotImproved() {
                     <Tooltip title="Tahrirlash" placement="top">
                       <button
                         className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105"
-                        onClick={() => setOpen(true)}
+                        onClick={() => {
+                          setEditingId(record.id); // shu joyda ID-ni set qilamiz
+                          form.setFieldsValue({
+                            name: record.name,
+                            contact_number: record.contact_number,
+                          });
+                          if (record.logo) setPreview(record.logo);
+                          setOpen(true);
+                        }}
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
@@ -249,8 +277,17 @@ export default function TashkilotImproved() {
 
       <Modal
         title="Ijarachini tahrirlash"
+        style={{ top: "50%", transform: "translateY(-50%)" }}
         open={open}
-        onCancel={handleClose}
+        onCancel={() => {
+          setOpen(false);
+          form.resetFields();
+          if (preview) {
+            URL.revokeObjectURL(preview);
+            setPreview(null);
+          }
+          setFile(null);
+        }}
         onOk={() => form.submit()}
         okText="Yangilash"
         cancelText="Bekor qilish"

@@ -240,7 +240,7 @@ export const api = createApi({
     }),
     updateTashkilod: builder.mutation({
       query: ({ id, formData }) => ({
-        url: `/tashkilot/${id}`,
+        url: `/ijarachilar/${id}/`,
         method: "PUT",
         body: formData,
       }),
