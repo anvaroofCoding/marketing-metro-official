@@ -224,9 +224,9 @@ export const api = createApi({
       }),
     }),
     getTashkilod: builder.query({
-      query: (search) => ({
+      query: ({ page, search, limit = 5 }) => ({
         url: `/ijarachilar/`,
-        params: search,
+        params: { page, search, limit },
       }),
       providesTags: ["tashkilod"],
     }),
@@ -246,11 +246,37 @@ export const api = createApi({
       }),
       invalidatesTags: ["tashkilod"],
     }),
+    getShowTashkilod: builder.query({
+      query: (id) => ({
+        url: `/ijarachilar/${id}/`,
+      }),
+    }),
+    getTashkilodExcel: builder.query({
+      query: () => ({
+        url: "/ijarachilar/export-excel",
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          return blob;
+        },
+      }),
+    }),
+    GetTashkilodPdf: builder.query({
+      query: () => ({
+        url: "/ijarachilar/export-pdf/",
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          return blob;
+        },
+      }),
+    }),
   }),
 });
 
 // Hooklar
 export const {
+  useGetTashkilodPdfQuery,
+  useGetTashkilodExcelQuery,
+  useGetShowTashkilodQuery,
   useUpdateTashkilodMutation,
   useAddTashkilodMutation,
   useGetTashkilodQuery,

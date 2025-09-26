@@ -11,6 +11,7 @@ import GenerelSearchDETAILS from "@/pages/general_rekSearch";
 import Map from "@/pages/map";
 import AdvertisementDetail from "@/pages/positions";
 import StationDetail from "@/pages/station";
+import TashkilodDetails from "@/pages/tashkilodDetails";
 import Tashkilot from "@/pages/tashkilot";
 import Weekdaitail from "@/pages/weekDetails";
 import { createBrowserRouter } from "react-router-dom";
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       { path: "/umumiy-qidiruv/", element: <Allsearch /> },
       { path: "/umumiy-qidiruv/:ida", element: <GenerelSearchDETAILS /> },
       { path: "/station/:id/", element: <StationDetail /> },
+      {
+        path: "/tashkilotni-royxatga-olish/:id",
+        element: <TashkilodDetails />,
+      },
       {
         path: "/station/:id/position/:ids/",
         element: <AdvertisementDetail />,

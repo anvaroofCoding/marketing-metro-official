@@ -1,23 +1,28 @@
-import { EditOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import {
-  Alert,
+  Edit3,
+  Plus,
+  Upload,
+  FileText,
+  Calendar,
+  DollarSign,
+  User,
+  Phone,
+  Download,
+  AlertCircle,
+  CheckCircle,
+  PhoneCall,
+  Handshake,
+} from "lucide-react";
+import {
   Button,
-  Card,
   DatePicker,
-  Divider,
-  Empty,
   Form,
-  Image,
   Input,
   InputNumber,
   Modal,
   Popconfirm,
   Select,
-  Space,
-  Spin,
-  Tooltip,
-  Typography,
-  Upload,
+  Upload as AntUpload,
   notification,
 } from "antd";
 import moment from "moment";
@@ -27,9 +32,11 @@ import {
   useCreateAdventMutation,
   useDeleteAdventMutation,
   useGetAdventQuery,
+  useGetTashkilodQuery,
   useUpdateAdventMutation,
 } from "../services/api";
-import { ListEnd } from "lucide-react";
+
+const { Option } = Select;
 
 export default function AdvertisementDetail() {
   const { ids } = useParams();
@@ -45,25 +52,44 @@ export default function AdvertisementDetail() {
     refetch,
   } = useGetAdventQuery();
 
+  const {
+    data: getTashkilod,
+    isLoadin: load,
+    isError: err,
+  } = useGetTashkilodQuery();
+
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
   const [createAdvent, { isLoading: postLoading }] = useCreateAdventMutation();
-  const [updateAdvent, { isLoading: updating }] = useUpdateAdventMutation();
+  const [updateAdvent, { isLoading: updating, error }] =
+    useUpdateAdventMutation();
   const [deleteAdvent, { isLoading: deleteLoading }] =
     useDeleteAdventMutation();
 
-  if (getLoading || postLoading || updating || deleteLoading)
+  if (getLoading || postLoading || updating || deleteLoading || load)
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Spin size="large" />
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 font-medium">Yuklanmoqda...</p>
+        </div>
       </div>
     );
 
-  if (getError)
+  console.log(error);
+
+  if (getError || err)
     return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <Empty />
-        <Alert message="Xatolik yuz berdi" type="warning" showIcon closable />
+      <div className="w-full h-screen flex justify-center items-center bg-gradient-to-br from-slate-50 to-red-50">
+        <div className="text-center bg-white rounded-3xl p-12 shadow-xl border border-red-100">
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-slate-800 mb-2">
+            Xatolik yuz berdi
+          </h3>
+          <p className="text-slate-600">
+            Ma'lumotlarni yuklashda muammo yuzaga keldi
+          </p>
+        </div>
       </div>
     );
 
@@ -82,7 +108,6 @@ export default function AdvertisementDetail() {
     setOpen(true);
   };
 
-  // add shartnoma qoshish
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
@@ -116,17 +141,17 @@ export default function AdvertisementDetail() {
         formData.append("photo", values.photo.fileList[0].originFileObj);
       }
 
-      formData.append("contact_number", values.contact_number);
-
       if (reklama) {
         await updateAdvent({ id: reklama.id, formData }).unwrap();
         notification.success({
           message: "Ma'lumotlar muvaffaqiyatli yangilandi",
+          icon: <CheckCircle className="w-5 h-5 text-green-500" />,
         });
       } else {
         await createAdvent(formData).unwrap();
         notification.success({
           message: "Ma'lumotlar muvaffaqiyatli to'ldirildi",
+          icon: <CheckCircle className="w-5 h-5 text-green-500" />,
         });
       }
 
@@ -137,79 +162,96 @@ export default function AdvertisementDetail() {
       notification.warning({
         message: `Diqqat ${error.data.photo}`,
         description: "Iltimos reklama rasmini qayta yuborishingiz shart!",
+        icon: <AlertCircle className="w-5 h-5 text-orange-500" />,
       });
     }
   };
 
-  // delete - ya'ni shartnomani tugatish
   const handleDelete = async (id) => {
     try {
       await deleteAdvent(id).unwrap();
       notification.success({
         message: "Shartnoma muvaffaqiyatli yakunlandi",
+        icon: <CheckCircle className="w-5 h-5 text-green-500" />,
       });
       refetch();
     } catch (err) {
       notification.error({
         message: "Xatolik yuz berdi",
         description: err?.data?.message || JSON.stringify(err),
+        icon: <AlertCircle className="w-5 h-5 text-red-500" />,
       });
     }
   };
 
   return (
-    <div className="min-h-[70vh] bg-transparent flex justify-center items-center">
+    <div className="min-h-screen">
       {reklama ? (
-        <div className="w-full h-screen">
-          {/* Header Card with Action Buttons */}
-          <Card className="mb-6  border-0 rounded-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 rounded-xl">
-              <div className="flex justify-between items-center">
-                <div className="flex gap-6 items-center">
-                  <div className="relative">
-                    <Image
-                      src={reklama.photo || "/placeholder.svg"}
-                      width={200}
-                      height={120}
+        <div className="space-y-8">
+          <div className="relative overflow-hidden rounded-3xl bg-white/70 backdrop-blur-xl border border-white/20 shadow-2xl">
+            <div
+              className="absolute inset-0 
+             bg-[url('/naqshtitle.png')] 
+             bg-repeat 
+             bg-center 
+             bg-[length:400px_400px] 
+             opacity-20
+             pointer-events-none
+             z-10"
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 via-indigo-600/90 to-blue-600/90"></div>
+            <div className="relative md:p-10">
+              <div className="flex flex-col lg:flex-row gap-8 items-start">
+                <div className="flex-shrink-0 bg-white/20 border border-white rounded-xl">
+                  <div>
+                    <img
+                      src={reklama.ijarachi.logo || "/placeholder.svg"}
+                      width={280}
+                      height={180}
                       alt="reklama rasmi"
-                      className="rounded-xl border-4 border-white/20 shadow-lg"
-                      fallback="/impactful-advertisement.png"
+                      className="relative w-50 z-20 "
+                      // fallback="/impactful-advertisement.png"
                     />
-                  </div>
-                  <div className="text-white flex items-start flex-col h-full ">
-                    <h1 className="text-[40px]/[40px] font-bold">
-                      {reklama.Reklama_nomi}
-                    </h1>
-                    {/* <div className='flex gap-3 mb-3'>
-											<Tag color='blue' className='px-3 py-1'>
-												{reklama.Qurilma_turi}
-											</Tag>
-											<Tag color='green' className='px-3 py-1'>
-												{reklama.O_lchov_birligi}
-											</Tag>
-										</div> */}
-                    <p className="text-blue-100 text-3xl">
-                      Ijarachi:{" "}
-                      <span className="font-semibold">{reklama.Ijarachi}</span>
-                    </p>
                   </div>
                 </div>
 
-                {/* Action Buttons */}
-                <Space size="middle" className="flex h-full items-center">
-                  <Tooltip title="Ma'lumotlarni tahrirlash">
-                    <Button
-                      variant="solid"
-                      color="cyan"
-                      ghost
-                      icon={<EditOutlined />}
-                      onClick={handleOpen}
-                      size="large"
-                      // className='border-white text-white hover:bg-white hover:text-blue-600'
-                    >
+                <div className="flex-1 text-white">
+                  <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                    {reklama.Reklama_nomi}
+                  </h1>
+                  <div className="flex items-center gap-3 mb-6">
+                    <User className="w-6 h-6 text-blue-200" />
+                    <p className="text-xl text-blue-100">
+                      Ijarachi:{" "}
+                      <span className="font-semibold text-white">
+                        {reklama.ijarachi.name}
+                      </span>
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-4">
+                    <div className="flex items-center gap-3 mb-6">
+                      <PhoneCall className="w-6 h-6 text-blue-200" />
+                      <p className="text-xl text-blue-100">
+                        Telefon raqami:{" "}
+                        <span className="font-semibold text-white">
+                          {reklama.ijarachi.contact_number}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={handleOpen}
+                    className="group flex items-center gap-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 rounded-2xl px-6 py-4 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  >
+                    <Edit3 className="w-5 h-5 text-white " />
+                    <span className="font-medium text-white">
                       Ma'lumotlarni tahrirlash
-                    </Button>
-                  </Tooltip>
+                    </span>
+                  </button>
 
                   <Popconfirm
                     title="Reklamani tugatish"
@@ -219,199 +261,192 @@ export default function AdvertisementDetail() {
                     cancelText="Bekor qilish"
                     okButtonProps={{ danger: true }}
                   >
-                    <Tooltip title="Reklamani tugatish">
-                      <Button
-                        variant="solid"
-                        color="red"
-                        ghost
-                        icon={<ListEnd />}
-                        size="large"
-                      >
-                        Shartnomani tugatish
-                      </Button>
-                    </Tooltip>
+                    <button className="group flex items-center gap-3 bg-red-500/50 hover:bg-red-500/60 backdrop-blur-sm border border-red-300/30 rounded-2xl px-6 py-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                      <Handshake className="w-5 h-5 text-red-200 " />
+                      <span className="font-medium text-red-100">
+                        Reklamani tugatish
+                      </span>
+                    </button>
                   </Popconfirm>
-                </Space>
+                </div>
               </div>
             </div>
-          </Card>
+          </div>
 
-          {/* Details Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-15">
-            {/* Contract Information */}
-            <Card
-              title="Shartnoma ma'lumotlari"
-              className="shadow-md rounded-xl border-0 "
-            >
-              <Space direction="vertical" className="w-full" size="middle">
-                <div>
-                  <Typography.Text type="secondary">
-                    Shartnoma raqami:
-                  </Typography.Text>
-                  <Typography.Text strong className="block text-lg">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {/* Contract Information Card */}
+            <div className="group bg-white/70 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800">
+                  Shartnoma ma'lumotlari
+                </h3>
+              </div>
+
+              <div className="space-y-6">
+                <div className="group/item">
+                  <p className="text-sm font-medium text-slate-500 mb-1">
+                    Shartnoma raqami
+                  </p>
+                  <p className="text-lg font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">
                     {reklama.Shartnoma_raqami}
-                  </Typography.Text>
+                  </p>
                 </div>
-                <div>
-                  <Typography.Text type="secondary">
-                    Qurilma turi:
-                  </Typography.Text>
-                  <Typography.Text strong className="block text-lg">
+
+                <div className="group/item">
+                  <p className="text-sm font-medium text-slate-500 mb-1">
+                    Qurilma turi
+                  </p>
+                  <p className="text-lg font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">
                     {reklama.Qurilma_turi}
-                  </Typography.Text>
+                  </p>
                 </div>
-                <div>
-                  <Typography.Text type="secondary">
-                    O'lchov birligi:
-                  </Typography.Text>
-                  <Typography.Text strong className="block text-lg">
-                    {reklama.O_lchov_birligi}
-                  </Typography.Text>
-                </div>
-                <Divider className="my-2" />
-                <div>
-                  <Typography.Text type="secondary">
-                    Boshlanish sanasi:
-                  </Typography.Text>
-                  <Typography.Text strong className="block">
-                    {moment(reklama.Shartnoma_muddati_boshlanishi).format(
-                      "DD.MM.YYYY"
-                    )}
-                  </Typography.Text>
-                </div>
-                <div>
-                  <Typography.Text type="secondary">
-                    Tugash sanasi:
-                  </Typography.Text>
-                  <Typography.Text strong className="block">
-                    {moment(reklama.Shartnoma_tugashi).format("DD.MM.YYYY")}
-                  </Typography.Text>
-                </div>
-              </Space>
-            </Card>
 
-            {/* Financial Information */}
-            <Card
-              title="Moliyaviy ma'lumotlar"
-              className="shadow-md rounded-xl border-0"
-            >
-              <Space direction="vertical" className="w-full" size="middle">
-                <div>
-                  <Typography.Text type="secondary">
-                    Qurilma narxi:
-                  </Typography.Text>
-                  <Typography.Text
-                    strong
-                    className="block text-lg text-green-600"
-                  >
+                <div className="group/item">
+                  <p className="text-sm font-medium text-slate-500 mb-1">
+                    Egallagan maydoni
+                  </p>
+                  <p className="text-lg font-semibold text-slate-800 group-hover/item:text-blue-600 transition-colors">
+                    {reklama.Egallagan_maydon} {reklama.O_lchov_birligi}
+                  </p>
+                </div>
+
+                <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-5 h-5 text-slate-400" />
+                  <div>
+                    <p className="text-sm font-medium text-slate-500">Muddat</p>
+                    <p className="text-base font-semibold text-slate-800">
+                      {moment(reklama.Shartnoma_muddati_boshlanishi).format(
+                        "DD.MM.YYYY"
+                      )}{" "}
+                      - {moment(reklama.Shartnoma_tugashi).format("DD.MM.YYYY")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Financial Information Card */}
+            <div className="group bg-white/70 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02]">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg">
+                  <DollarSign className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800">
+                  Moliyaviy ma'lumotlar
+                </h3>
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 border border-green-100">
+                  <p className="text-sm font-medium text-green-600 mb-1">
+                    Qurilma narxi
+                  </p>
+                  <p className="text-2xl font-bold text-green-700">
                     {reklama.Qurilma_narxi?.toLocaleString()} so'm
-                  </Typography.Text>
+                  </p>
                 </div>
-                <Divider className="my-2" />
-                <div>
-                  <Typography.Text type="secondary">
-                    Shartnoma summasi:
-                  </Typography.Text>
-                  <Typography.Text
-                    strong
-                    className="block text-lg text-blue-600"
-                  >
-                    {reklama.Shartnoma_summasi?.toLocaleString()} so'm
-                  </Typography.Text>
-                </div>
-                <div>
-                  <Typography.Text type="secondary">
-                    Egallagan maydon:
-                  </Typography.Text>
-                  <Typography.Text strong className="block">
-                    {reklama.Egallagan_maydon}
-                  </Typography.Text>
-                </div>
-              </Space>
-            </Card>
 
-            {/* Contact Information */}
-            <Card
-              title="Aloqa ma'lumotlari"
-              className="shadow-md rounded-xl border-0"
-            >
-              <Space direction="vertical" className="w-full" size="middle">
-                <div>
-                  <Typography.Text type="secondary">
-                    Telefon raqami:
-                  </Typography.Text>
-                  <Typography.Text strong className="block text-lg">
-                    {reklama.contact_number}
-                  </Typography.Text>
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 border border-blue-100">
+                  <p className="text-sm font-medium text-blue-600 mb-1">
+                    Shartnoma summasi
+                  </p>
+                  <p className="text-2xl font-bold text-blue-700">
+                    {reklama.Shartnoma_summasi?.toLocaleString()} so'm
+                  </p>
                 </div>
-                <Divider className="my-2" />
+              </div>
+            </div>
+
+            {/* Contact Information Card */}
+            <div className="group bg-white/70 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] md:col-span-2 xl:col-span-1">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-lg">
+                  <Phone className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800">
+                  Shartnoma hujjatlari
+                </h3>
+              </div>
+
+              <div className="space-y-6">
+                <div className="group/item">
+                  <p className="text-sm font-medium text-slate-500 mb-1">
+                    Telefon raqami
+                  </p>
+                  <p className="text-lg font-semibold text-slate-800 group-hover/item:text-purple-600 transition-colors">
+                    {reklama.contact_number}
+                  </p>
+                </div>
+
                 {reklama.Shartnoma_fayl && (
-                  <div>
-                    <Typography.Text type="secondary">
-                      Shartnoma fayli:
-                    </Typography.Text>
-                    <Button
-                      type="link"
-                      href={reklama.Shartnoma_fayl}
-                      target="_blank"
-                      className="p-0 h-auto"
-                    >
-                      Faylni yuklab olish
-                    </Button>
-                  </div>
+                  <a
+                    href={reklama.Shartnoma_fayl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 bg-slate-50 hover:bg-slate-100 rounded-2xl p-4 transition-all duration-300 hover:scale-105 group/download"
+                  >
+                    <Download className="w-5 h-5 text-slate-600 group-hover/download:text-blue-600 transition-colors" />
+                    <span className="font-medium text-slate-700 group-hover/download:text-blue-600 transition-colors">
+                      Shartnoma faylini yuklab olish
+                    </span>
+                  </a>
                 )}
-                {reklama.Shartnoma_fayl && (
-                  <div>
-                    <Typography.Text type="secondary">
-                      Reklama rasmini yuklash:
-                    </Typography.Text>
-                    <Button
-                      type="link"
-                      href={reklama.photo}
-                      target="_blank"
-                      className="p-0 h-auto"
-                    >
-                      Faylni yuklab olish
-                    </Button>
-                  </div>
+
+                {reklama.photo && (
+                  <a
+                    href={reklama.photo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 bg-slate-50 hover:bg-slate-100 rounded-2xl p-4 transition-all duration-300 hover:scale-105 group/download"
+                  >
+                    <Download className="w-5 h-5 text-slate-600 group-hover/download:text-purple-600 transition-colors" />
+                    <span className="font-medium text-slate-700 group-hover/download:text-purple-600 transition-colors">
+                      Reklama rasmini yuklab olish
+                    </span>
+                  </a>
                 )}
-              </Space>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       ) : (
         <div className="flex justify-center items-center min-h-[60vh]">
-          <Card className="text-center p-8 shadow-lg rounded-2xl border-0 max-w-md">
-            <Empty
-              description={
-                <div className="mt-4">
-                  <Typography.Title level={4} className="text-gray-600">
-                    Ma'lumot topilmadi
-                  </Typography.Title>
-                  <Typography.Text className="text-gray-500">
-                    Bu pozitsiya uchun reklama ma'lumotlari mavjud emas
-                  </Typography.Text>
-                </div>
-              }
+          <div className="text-center bg-white/70 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/20 max-w-md">
+            <div className="w-20 h-20 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center mx-auto mb-6">
+              <AlertCircle className="w-10 h-10 text-slate-500" />
+            </div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-3">
+              Ma'lumot topilmadi
+            </h3>
+            <p className="text-slate-600 mb-8">
+              Bu pozitsiya uchun reklama ma'lumotlari mavjud emas
+            </p>
+            <button
+              onClick={handleOpen}
+              className="group flex items-center gap-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-2xl px-8 py-4 font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl mx-auto"
             >
-              <Button
-                type="primary"
-                size="large"
-                onClick={handleOpen}
-                icon={<PlusOutlined />}
-                className="mt-4 px-8 py-2 h-auto rounded-lg"
-              >
-                Yangi reklama qo'shish
-              </Button>
-            </Empty>
-          </Card>
+              <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+              Yangi reklama qo'shish
+            </button>
+          </div>
         </div>
       )}
 
-      {/* Enhanced Modal */}
       <Modal
         title={
-          <div className="text-xl font-semibold text-gray-800">
+          <div className="flex items-center gap-3 text-2xl font-bold text-slate-800 pb-4 border-b border-slate-200">
+            <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl">
+              {reklama ? (
+                <Edit3 className="w-6 h-6 text-white" />
+              ) : (
+                <Plus className="w-6 h-6 text-white" />
+              )}
+            </div>
             {reklama ? "Reklamani tahrirlash" : "Yangi reklama qo'shish"}
           </div>
         }
@@ -420,77 +455,145 @@ export default function AdvertisementDetail() {
         onCancel={() => setOpen(false)}
         okText="Saqlash"
         cancelText="Bekor qilish"
-        width={800}
+        width={900}
         className="top-8"
         okButtonProps={{
           size: "large",
-          className: "px-8",
+          className:
+            "px-8 h-12 rounded-xl font-semibold bg-gradient-to-r from-blue-500 to-indigo-600 border-0 hover:from-blue-600 hover:to-indigo-700",
         }}
         cancelButtonProps={{
           size: "large",
-          className: "px-8",
+          className: "px-8 h-12 rounded-xl font-semibold",
         }}
       >
-        <Form form={form} layout="vertical" className="mt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Form form={form} layout="vertical" className="mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Form.Item
               name="Reklama_nomi"
-              label="Reklama nomi"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Reklama nomi
+                </span>
+              }
               rules={[{ required: true, message: "Reklama nomini kiriting" }]}
             >
-              <Input placeholder="Reklama nomini kiriting" size="large" />
+              <Input
+                placeholder="Reklama nomini kiriting"
+                size="large"
+                className="rounded-xl border-slate-200 hover:border-blue-400 focus:border-blue-500"
+              />
             </Form.Item>
 
             <Form.Item
               name="Qurilma_turi"
-              label="Qurilma turi"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Qurilma turi
+                </span>
+              }
               rules={[{ required: true, message: "Qurilma turini kiriting" }]}
             >
-              <Input placeholder="Masalan: banner, monitor..." size="large" />
+              <Input
+                placeholder="Masalan: banner, monitor..."
+                size="large"
+                className="rounded-xl border-slate-200 hover:border-blue-400 focus:border-blue-500"
+              />
             </Form.Item>
 
             <Form.Item
               name="Ijarachi"
-              label="Ijarachi"
+              label={
+                <span className="font-semibold text-slate-700">Ijarachi</span>
+              }
               rules={[{ required: true, message: "Ijarachi nomini kiriting" }]}
             >
-              <Input placeholder="Ijarachi nomi" size="large" />
+              <Select
+                showSearch
+                size="large"
+                placeholder="Ijarachini tanlang"
+                optionFilterProp="children"
+                className="rounded-xl"
+                filterOption={(input, option) =>
+                  (option?.children ?? "")
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+              >
+                {getTashkilod?.results?.map((item) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
 
             <Form.Item
               name="Shartnoma_raqami"
-              label="Shartnoma raqami"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Shartnoma raqami
+                </span>
+              }
               rules={[
                 { required: true, message: "Shartnoma raqamini kiriting" },
               ]}
             >
-              <Input placeholder="Shartnoma raqami" size="large" />
+              <Input
+                placeholder="Shartnoma raqami"
+                size="large"
+                className="rounded-xl border-slate-200 hover:border-blue-400 focus:border-blue-500"
+              />
             </Form.Item>
 
             <Form.Item
               name="Shartnoma_muddati_boshlanishi"
-              label="Shartnoma boshlanish sanasi"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Shartnoma boshlanish sanasi
+                </span>
+              }
               rules={[
                 { required: true, message: "Boshlanish sanasini tanlang" },
               ]}
             >
-              <DatePicker style={{ width: "100%" }} size="large" />
+              <DatePicker
+                style={{ width: "100%" }}
+                size="large"
+                className="rounded-xl border-slate-200 hover:border-blue-400 focus:border-blue-500"
+              />
             </Form.Item>
 
             <Form.Item
               name="Shartnoma_tugashi"
-              label="Shartnoma tugash sanasi"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Shartnoma tugash sanasi
+                </span>
+              }
               rules={[{ required: true, message: "Tugash sanasini tanlang" }]}
             >
-              <DatePicker style={{ width: "100%" }} size="large" />
+              <DatePicker
+                style={{ width: "100%" }}
+                size="large"
+                className="rounded-xl border-slate-200 hover:border-blue-400 focus:border-blue-500"
+              />
             </Form.Item>
 
             <Form.Item
               name="O_lchov_birligi"
-              label="O'lchov birligi"
+              label={
+                <span className="font-semibold text-slate-700">
+                  O'lchov birligi
+                </span>
+              }
               rules={[{ required: true, message: "O'lchov birligini tanlang" }]}
             >
-              <Select placeholder="O'lchov birligini tanlang" size="large">
+              <Select
+                placeholder="O'lchov birligini tanlang"
+                size="large"
+                className="rounded-xl"
+              >
                 <Select.Option value="komplekt">Komplekt</Select.Option>
                 <Select.Option value="kv_metr">Kvadrat metr</Select.Option>
                 <Select.Option value="dona">Dona</Select.Option>
@@ -498,16 +601,12 @@ export default function AdvertisementDetail() {
             </Form.Item>
 
             <Form.Item
-              name="contact_number"
-              label="Aloqa raqami"
-              rules={[{ required: true, message: "Aloqa raqamini kiriting" }]}
-            >
-              <Input placeholder="+998..." size="large" />
-            </Form.Item>
-
-            <Form.Item
               name="Qurilma_narxi"
-              label="Qurilma narxi (so'm)"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Qurilma narxi (so'm)
+                </span>
+              }
               rules={[{ required: true, message: "Qurilma narxini kiriting" }]}
             >
               <InputNumber
@@ -515,6 +614,7 @@ export default function AdvertisementDetail() {
                 min={0}
                 step={1000}
                 size="large"
+                className="rounded-xl"
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
@@ -524,7 +624,11 @@ export default function AdvertisementDetail() {
 
             <Form.Item
               name="Shartnoma_summasi"
-              label="Shartnoma summasi (so'm)"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Shartnoma summasi (so'm)
+                </span>
+              }
               rules={[
                 { required: true, message: "Shartnoma summasini kiriting" },
               ]}
@@ -534,41 +638,67 @@ export default function AdvertisementDetail() {
                 min={0}
                 step={1000}
                 size="large"
+                className="rounded-xl"
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
               />
             </Form.Item>
+
+            <Form.Item
+              name="Egallagan_maydon"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Egallagan maydon
+                </span>
+              }
+            >
+              <Input
+                placeholder="Masalan: 2.5 yoki -"
+                size="large"
+                className="rounded-xl border-slate-200 hover:border-blue-400 focus:border-blue-500"
+              />
+            </Form.Item>
           </div>
 
-          <Form.Item name="Egallagan_maydon" label="Egallagan maydon">
-            <Input placeholder="Masalan: 2.5 yoki -" size="large" />
-          </Form.Item>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Form.Item name="Shartnoma_fayl" label="Shartnoma fayli">
-              <Upload beforeUpload={() => false}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <Form.Item
+              name="Shartnoma_fayl"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Shartnoma fayli
+                </span>
+              }
+            >
+              <AntUpload beforeUpload={() => false}>
                 <Button
-                  icon={<UploadOutlined />}
+                  icon={<Upload className="w-5 h-5" />}
                   size="large"
-                  className="w-full"
+                  className="w-full h-12 rounded-xl font-semibold border-slate-200 hover:border-blue-400 hover:text-blue-600"
                 >
                   Fayl yuklash
                 </Button>
-              </Upload>
+              </AntUpload>
             </Form.Item>
 
-            <Form.Item name="photo" label="Reklama rasmi">
-              <Upload listType="picture" beforeUpload={() => false}>
+            <Form.Item
+              name="photo"
+              label={
+                <span className="font-semibold text-slate-700">
+                  Reklama rasmi
+                </span>
+              }
+            >
+              <AntUpload listType="picture" beforeUpload={() => false}>
                 <Button
-                  icon={<UploadOutlined />}
+                  icon={<Upload className="w-5 h-5" />}
                   size="large"
-                  className="w-full"
+                  className="w-full h-12 rounded-xl font-semibold border-slate-200 hover:border-blue-400 hover:text-blue-600"
                 >
                   Rasm yuklash
                 </Button>
-              </Upload>
+              </AntUpload>
             </Form.Item>
           </div>
         </Form>

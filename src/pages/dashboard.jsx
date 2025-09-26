@@ -255,10 +255,10 @@ const Dashboard = () => {
                       <div className="flex items-center space-x-4 flex-1 min-w-0">
                         <div className="relative">
                           <img
-                            src={items.photo || "/placeholder.svg"}
+                            src={items?.ijarachi?.logo || "/placeholder.svg"}
                             width={64}
                             height={64}
-                            alt={items.Reklama_nomi}
+                            alt={items?.Reklama_nomi}
                             className="rounded-xl object-cover shadow-md group-hover:scale-105 transition-transform duration-300"
                           />
                           <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full animate-pulse"></div>
@@ -266,7 +266,7 @@ const Dashboard = () => {
 
                         <div className="flex-1 min-w-0 space-y-1">
                           <h3 className="text-lg font-semibold text-slate-800 truncate group-hover:text-blue-600 transition-colors">
-                            {items.Reklama_nomi}
+                            {items.ijarachi.name}
                           </h3>
                           <div className="flex items-center space-x-2">
                             <span className="inline-flex items-center px-3 py-1 text-sm font-bold text-white bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full shadow-sm">

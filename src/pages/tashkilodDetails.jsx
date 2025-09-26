@@ -5,40 +5,49 @@ import {
 } from "@ant-design/icons";
 import { Button, Input, notification, Space, Spin, Table, Tooltip } from "antd";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useGetTimeQuery, useGetTugaganExcelQuery } from "../services/api";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useGetArchivePdfQuery,
+  useGetArchiveQuery,
+  useGetArchiveShowExcelQuery,
+  useGetShowTashkilodQuery,
+} from "../services/api";
 
-export default function Delay7() {
+export default function TashkilodDetails() {
   const { Column, ColumnGroup } = Table;
   const navigate = useNavigate();
+  const { id } = useParams();
+  console.log(id);
 
-  // pagination va search uchun state
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
   const [search, setSearch] = useState("");
-  const { data: excelBlob, isFetching } = useGetTugaganExcelQuery();
-
-  // API dan malumot olish
+  const { data: excelBlob, isFetching } = useGetArchiveShowExcelQuery();
+  const { data: FilePdfFilled, isFetching: isFetchingPdf } =
+    useGetArchivePdfQuery();
   const {
     data,
-    isLoading: Endloading,
-    error: EndError,
-  } = useGetTimeQuery({ page, limit, search });
+    isLoading: archiveloading,
+    error: archiveerror,
+  } = useGetArchiveQuery({ page, limit, search });
+  const { data: getShowTAshkilod, isLoading: loads } =
+    useGetShowTashkilodQuery(id);
 
-  if (Endloading) {
+  if (archiveloading || loads) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <Spin size="large" />
       </div>
     );
   }
-  if (EndError) {
+
+  console.log(getShowTAshkilod);
+  if (archiveerror) {
     notification.error({ message: "Ma'lumotlarni yuklashda xatolik" });
   }
 
-  //   batafsil ko‘rish
-  function handleShow(id) {
-    navigate(`/kechikishlar/${id}`);
+  function handleShow(ida) {
+    navigate(`/archive-show/${ida}/`);
   }
 
   function handleDownloads() {
@@ -46,7 +55,7 @@ export default function Delay7() {
     const url = window.URL.createObjectURL(excelBlob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "oxirgi-7kun.xlsx");
+    link.setAttribute("download", "reklamalar-arxiv.xlsx");
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -54,10 +63,26 @@ export default function Delay7() {
     notification.success({ message: "Excel muvaffaqiyatli ko'chirildi" });
   }
 
+  function handleDownloadsPdf() {
+    if (!FilePdfFilled) return;
+    const url = window.URL.createObjectURL(FilePdfFilled);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "arxiv.pdf");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    notification.success({ message: "PDf muvaffaqiyatli ko'chirildi" });
+  }
+
   return (
     <div className="w-full h-full flex flex-col">
       {/* Search qismi */}
-      <div className="h-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2 p-2">
+      <div className="w-full font-bold py-2">
+        <h1 className="text-2xl">Ijarachi: {getShowTAshkilod.name}</h1>
+      </div>
+      <div className="h-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2 py-3">
         <Input
           placeholder="Qidirish..."
           prefix={<SearchOutlined />}
@@ -65,34 +90,23 @@ export default function Delay7() {
           onChange={(e) => setSearch(e.target.value)}
           className="w-full sm:w-[250px]"
         />
-        <Button
-          type="primary"
-          icon={<FileExcelOutlined />}
-          onClick={handleDownloads}
-          loading={isFetching}
-          disabled={!excelBlob}
-          className="w-full sm:w-auto"
-        >
-          Excel ko'chirish
-        </Button>
       </div>
 
       {/* Jadval qismi */}
       <div className="flex-1 w-full overflow-x-auto">
         <Table
-          dataSource={data?.results?.haftada_tugaydigan}
+          dataSource={getShowTAshkilod?.reklamalari}
           rowKey="id"
           pagination={{
             current: page,
             pageSize: limit,
-            total: data?.count,
+            total: getShowTAshkilod?.reklamalari?.length,
             onChange: (p) => setPage(p),
           }}
           scroll={{ x: "max-content" }} // kichik ekranlarda horizontal scroll
         >
           <ColumnGroup>
-            <Column title="ID" dataIndex="id" key="id" responsive={["sm"]} />
-            <Column title="Ijarachi" dataIndex="Ijarachi" key="Ijarachi" />
+            {/* <Column title="ID" dataIndex="id" key="id" responsive={["sm"]} /> */}
             <Column
               title="Reklama nomi"
               dataIndex="Reklama_nomi"
@@ -104,7 +118,11 @@ export default function Delay7() {
               key="Shartnoma_raqami"
               responsive={["md"]}
             />
-            <Column title="Bekat nomi" dataIndex="station" key="station" />
+            <Column
+              title="Bekat nomi"
+              dataIndex="station_name"
+              key="station_name"
+            />
             <Column
               title="Shartnoma boshlanishi"
               dataIndex="Shartnoma_muddati_boshlanishi"
@@ -116,13 +134,6 @@ export default function Delay7() {
               dataIndex="Shartnoma_tugashi"
               key="Shartnoma_tugashi"
               responsive={["lg"]}
-              className="text-red-600 font-semibold"
-            />
-            <Column
-              title="Telefon raqami"
-              dataIndex="contact_number"
-              key="contact_number"
-              responsive={["md"]}
             />
             <Column
               title="Saqlandi"
@@ -144,23 +155,6 @@ export default function Delay7() {
               dataIndex="created_by"
               key="created_by"
               responsive={["md"]}
-            />
-            <Column
-              title="Batafsil"
-              key="id"
-              render={(_, record) => (
-                <Space size="middle">
-                  <Tooltip title="Batafsil ko'rish">
-                    <Button
-                      type="primary"
-                      size="small"
-                      onClick={() => handleShow(record.id)}
-                    >
-                      <EyeOutlined />
-                    </Button>
-                  </Tooltip>
-                </Space>
-              )}
             />
           </ColumnGroup>
         </Table>

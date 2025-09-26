@@ -2,6 +2,7 @@
 
 import {
   EyeFilled,
+  FileExcelOutlined,
   PlusCircleFilled,
   SearchOutlined,
   UploadOutlined,
@@ -12,6 +13,7 @@ import {
   Image,
   Input,
   Modal,
+  Pagination,
   Spin,
   Tooltip,
   Upload,
@@ -20,6 +22,9 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  useGetArchivePdfQuery,
+  useGetTashkilodExcelQuery,
+  useGetTashkilodPdfQuery,
   useGetTashkilodQuery,
   useUpdateTashkilodMutation,
 } from "../services/api";
@@ -43,12 +48,20 @@ export default function TashkilotImproved() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
   const { data: positions, isLoading: positionsLoading } = useGetTashkilodQuery(
     {
       search: value,
+      page,
+      limit,
     }
   );
+
+  const { data: excelBlob, isFetching } = useGetTashkilodExcelQuery();
+  const { data: FilePdfFilled, isFetching: isFetchingPdf } =
+    useGetTashkilodPdfQuery();
 
   const EditValues = async (values) => {
     const formData = new FormData();
@@ -74,6 +87,32 @@ export default function TashkilotImproved() {
     }
   };
 
+  function handleDownloads() {
+    if (!excelBlob) return;
+    const url = window.URL.createObjectURL(excelBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "Ijarachilar.xlsx");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    notification.success({ message: "Excel muvaffaqiyatli ko'chirildi" });
+  }
+
+  function handleDownloadsPdf() {
+    if (!FilePdfFilled) return;
+    const url = window.URL.createObjectURL(FilePdfFilled);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "tashkilotlar.pdf");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    notification.success({ message: "PDf muvaffaqiyatli ko'chirildi" });
+  }
+
   const handleUpload = (fileObj) => {
     const url = URL.createObjectURL(fileObj);
     setPreview(url);
@@ -87,7 +126,7 @@ export default function TashkilotImproved() {
     };
   }, [preview]);
 
-  if (positionsLoading) {
+  if (positionsLoading || isFetching || isFetchingPdf) {
     return (
       <div className="w-full h-screen flex justify-center items-center ">
         <Spin size="large" />
@@ -117,15 +156,41 @@ export default function TashkilotImproved() {
                 className="rounded-xl border-gray-200 shadow-sm hover:border-blue-400 focus:border-blue-500 transition-colors"
               />
             </div>
-            <Button
-              type="primary"
-              size="large"
-              icon={<PlusCircleFilled />}
-              onClick={() => dispatch(openModal())}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-0 rounded-xl px-8 shadow-lg hover:shadow-xl transition-all duration-300 font-semibold"
-            >
-              Yangi tashkilot qo'shish
-            </Button>
+            <div className="flex justify-center items-center gap-2">
+              <Button
+                variant="solid"
+                color="orange"
+                icon={<FileExcelOutlined />}
+                onClick={handleDownloadsPdf}
+                loading={isFetchingPdf}
+                disabled={!FilePdfFilled}
+                className="w-full sm:w-auto"
+                size="large"
+              >
+                PDF ko'chirish
+              </Button>
+              <Button
+                color="green"
+                variant="solid"
+                icon={<FileExcelOutlined />}
+                onClick={handleDownloads}
+                loading={isFetching}
+                disabled={!excelBlob}
+                className="w-full sm:w-auto"
+                size="large"
+              >
+                Excel ko'chirish
+              </Button>
+              <Button
+                type="primary"
+                size="large"
+                icon={<PlusCircleFilled />}
+                onClick={() => dispatch(openModal())}
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-0 rounded-xl px-8 shadow-lg hover:shadow-xl transition-all duration-300 font-semibold"
+              >
+                Yangi tashkilot qo'shish
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -158,6 +223,7 @@ export default function TashkilotImproved() {
                           alt={record.name}
                           className="w-full h-full object-contain rounded-lg"
                           fallback="/api/placeholder/40/40"
+                          loading="lazy"
                         />
                       </div>
                       <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-white flex items-center justify-center shadow-sm">
@@ -203,7 +269,7 @@ export default function TashkilotImproved() {
                     {record.advertisement ? (
                       <Tooltip title="Reklamani ko'rish" placement="top">
                         <button
-                          onClick={() => navigate(`position/${record.id}`)}
+                          onClick={() => navigate(`/${record.id}`)}
                           className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg transform hover:scale-105"
                         >
                           <EyeFilled className="text-sm" />
@@ -214,12 +280,12 @@ export default function TashkilotImproved() {
                       <Tooltip title="Reklama qo'shish" placement="bottom">
                         <button
                           onClick={() =>
-                            navigate(`tashkilotni-royxatga-olish/${record.id}`)
+                            navigate(`/tashkilotni-royxatga-olish/${record.id}`)
                           }
                           className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg transform hover:scale-105"
                         >
                           <EyeIcon className="w-4 h-4" />
-                          <span>Qo'shish</span>
+                          <span>Ko'rish</span>
                         </button>
                       </Tooltip>
                     )}
@@ -249,6 +315,18 @@ export default function TashkilotImproved() {
             );
           })}
         </div>
+
+        {positions?.results && (
+          <div className="flex w-full mt-5">
+            <Pagination
+              current={page}
+              pageSize={limit}
+              total={positions?.count} // backend `count` qaytarishi kerak
+              onChange={(p) => setPage(p)}
+              className="mt-10 text-center "
+            />
+          </div>
+        )}
 
         {/* Empty State */}
         {positions?.results?.length === 0 && (
