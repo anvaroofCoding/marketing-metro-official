@@ -32,7 +32,7 @@ import {
   useCreateAdventMutation,
   useDeleteAdventMutation,
   useGetAdventQuery,
-  useGetTashkilodQuery,
+  useGetTashkilodoptionsQuery,
   useUpdateAdventMutation,
 } from "../services/api";
 
@@ -52,7 +52,7 @@ export default function AdvertisementDetail() {
     refetch,
   } = useGetAdventQuery();
 
-  const { data: getTashkilod, isLoadin: load } = useGetTashkilodQuery();
+  const { data: getTashkilod, isLoadin: load } = useGetTashkilodoptionsQuery();
 
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();

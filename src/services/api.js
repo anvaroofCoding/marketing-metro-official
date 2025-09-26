@@ -269,11 +269,18 @@ export const api = createApi({
         },
       }),
     }),
+    getTashkilodoptions: builder.query({
+      query: () => ({
+        url: `/ijarachilar/`,
+      }),
+      providesTags: ["tashkilod"],
+    }),
   }),
 });
 
 // Hooklar
 export const {
+  useGetTashkilodoptionsQuery,
   useGetTashkilodPdfQuery,
   useGetTashkilodExcelQuery,
   useGetShowTashkilodQuery,
