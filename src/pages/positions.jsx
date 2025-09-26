@@ -1,9 +1,4 @@
-import {
-  DeleteOutlined,
-  EditOutlined,
-  PlusOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   Alert,
   Button,
@@ -34,6 +29,7 @@ import {
   useGetAdventQuery,
   useUpdateAdventMutation,
 } from "../services/api";
+import { ListEnd } from "lucide-react";
 
 export default function AdvertisementDetail() {
   const { ids } = useParams();
@@ -162,12 +158,12 @@ export default function AdvertisementDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent p-6">
+    <div className="min-h-[70vh] bg-transparent flex justify-center items-center">
       {reklama ? (
-        <div>
+        <div className="w-full h-screen">
           {/* Header Card with Action Buttons */}
           <Card className="mb-6  border-0 rounded-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 rounded-xl">
               <div className="flex justify-between items-center">
                 <div className="flex gap-6 items-center">
                   <div className="relative">
@@ -228,7 +224,7 @@ export default function AdvertisementDetail() {
                         variant="solid"
                         color="red"
                         ghost
-                        icon={<DeleteOutlined />}
+                        icon={<ListEnd />}
                         size="large"
                       >
                         Shartnomani tugatish

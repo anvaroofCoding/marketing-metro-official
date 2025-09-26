@@ -130,6 +130,16 @@ const Dashboard = () => {
     <div className="min-h-screen overflow-y-auto">
       {/* Header with enhanced gradient and animation */}
       <div className="relative bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 rounded-3xl border border-slate-200/20 p-8 mb-8 mx-4 mt-4 overflow-hidden">
+        <div
+          className="absolute inset-0 
+             bg-[url('/naqshtitle.png')] 
+             bg-repeat 
+             bg-center 
+             bg-[length:400px_400px] 
+             opacity-20
+             pointer-events-none
+             z-0"
+        ></div>
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-indigo-600/10 animate-pulse"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="relative z-10">
@@ -214,22 +224,12 @@ const Dashboard = () => {
       <div className="px-4 grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
         {/* Enhanced Top Performing Ads with Infinite Vertical Scroll */}
         <div className="space-y-6">
-          <div
-            className="absolute inset-0 
-             bg-[url('/naqshtitle.png')] 
-             bg-repeat 
-             bg-center 
-             bg-[length:400px_400px] 
-             opacity-20
-             pointer-events-none
-             z-0"
-          ></div>
           <div className="flex items-center space-x-3 mb-6">
             <div className="p-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg">
               <StarIcon className="w-6 h-6 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-slate-800">
-              Shartnoma qimati eng yuqori top 5ta tashkilot
+              Shartnoma qiymati eng yuqori top 5ta tashkilot
             </h2>
           </div>
 

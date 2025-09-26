@@ -8,6 +8,7 @@ import {
 import { Modal, Spin } from "antd";
 import {
   Archive,
+  Building2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -18,8 +19,8 @@ import {
   Search,
   User,
 } from "lucide-react";
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "@ant-design/v5-patch-for-react-19";
 
 export default function Sidebar() {
@@ -28,9 +29,43 @@ export default function Sidebar() {
   const [expandedItems, setExpandedItems] = useState(["/delays/"]);
   const [collapsed, setCollapsed] = useState(false); // 🔥 sidebar collapse state
   const { data: notiveData, isLoading: Endloading } = useGetNotiveQuery();
+  // 🔥 Online vaqt state
+  const [onlineTime, setOnlineTime] = useState("00:00");
 
   const { data: userData, isLoading } = useGetMeQuery();
   const { data: deleyEnd, isLoading: delaysEndLoading } = useGetDelaysQuery();
+
+  // 🔥 Session Timer logikasi
+  useEffect(() => {
+    const savedStart = localStorage.getItem("sessionStart");
+    if (!savedStart) return; // login qilmagan bo‘lsa
+
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const diff = now - parseInt(savedStart, 10);
+
+      // 9 soat o‘tib ketsa 00:00 ga qaytarish
+      if (diff >= 9 * 60 * 60 * 1000) {
+        // 9 soat = 32400000 ms
+        setOnlineTime("00:00");
+        localStorage.removeItem("sessionStart");
+        clearInterval(timer);
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+
+      setOnlineTime(
+        `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+      );
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   if (isLoading || Endloading || delaysEndLoading) {
     return (
@@ -47,6 +82,15 @@ export default function Sidebar() {
       label: (
         <div className="flex justify-between items-center w-full">
           <span>Dashboard</span>
+        </div>
+      ),
+    },
+    {
+      key: "/tashkilotni-royxatga-olish",
+      icon: <Building2 size={20} />,
+      label: (
+        <div className="flex justify-between items-center w-full">
+          <span>Toshkilotlarni ro'yxatga olish</span>
         </div>
       ),
     },
@@ -196,7 +240,7 @@ export default function Sidebar() {
             ${level > 0 ? "ml-6 pl-8" : ""}
             ${
               isActive
-                ? "bg-gradient-to-r bg-white text-black shadow-lg "
+                ? "bg-gradient-to-r bg-blue-200 text-black shadow-lg "
                 : "text-white  hover:bg-blue-600 hover:text-white"
             }
           `}
@@ -232,21 +276,33 @@ export default function Sidebar() {
   return (
     <div
       className={`h-screen  bg-[#1777FF]   
-             flex flex-col transition-all  duration-300 ${
+             flex flex-col transition-all relative  duration-300 ${
                collapsed ? "w-20" : "w-85"
              }`}
     >
+      <div
+        className="absolute inset-0 
+             bg-[url('/naqshtitle.png')] 
+             bg-repeat 
+             bg-center 
+             bg-[length:400px_400px] 
+             opacity-20
+             pointer-events-none
+             z-0"
+      ></div>
       {/* Header */}
       <div className="p-6 flex justify-between items-center">
         {!collapsed && (
           <div className="flex items-center space-x-2">
-            <img src="/logos.png" alt="metro logo" className="w-10" />
+            <Link to={"/"}>
+              <img src="/logos.png" alt="metro logo" className="w-10" />
+            </Link>
             <h1 className="text-2xl font-bold text-white">Marketing</h1>
           </div>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="text-white p-2 rounded-full hover:bg-black transition"
+          className="text-white p-2 rounded-full hover:bg-blue-800 transition"
         >
           {collapsed ? <ChevronRight size={22} /> : <ChevronLeft size={22} />}
         </button>
@@ -254,22 +310,24 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 py-6 overflow-y-auto overflow-x-hidden">
-        <div className="space-y-1">
+        <div className="space-y-1 relative z-10 ">
           {menuItems.map((item) => renderMenuItem(item))}
         </div>
       </nav>
 
       {/* Account Section */}
       {!collapsed && (
-        <div className="p-4">
+        <div className="p-4 relative z-10">
           <div className="flex items-center space-x-3 mb-4 p-3 rounded-lg bg-white">
-            <div className="w-10 h-10 bg-gradient-to-r bg-black rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
               <User size={20} className="text-white" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-black truncate">
+            <div className="flex-1">
+              <p className="text-md font-medium text-black truncate">
                 {userData?.username}
               </p>
+
+              <p className="text-xs text-gray-500 font-bold"> ⏱ {onlineTime}</p>
             </div>
           </div>
 

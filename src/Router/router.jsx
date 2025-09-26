@@ -11,6 +11,7 @@ import GenerelSearchDETAILS from "@/pages/general_rekSearch";
 import Map from "@/pages/map";
 import AdvertisementDetail from "@/pages/positions";
 import StationDetail from "@/pages/station";
+import Tashkilot from "@/pages/tashkilot";
 import Weekdaitail from "@/pages/weekDetails";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: "/", element: <Dashboard /> },
+      { path: "/tashkilotni-royxatga-olish", element: <Tashkilot /> },
       { path: "/archive/", element: <Archive /> },
       { path: "/delay7/", element: <Delay7 /> },
       { path: "/delaysEnd/", element: <DelayEnd /> },

@@ -223,11 +223,37 @@ export const api = createApi({
         url: "/auth/check/",
       }),
     }),
+    getTashkilod: builder.query({
+      query: (search) => ({
+        url: `/ijarachilar/`,
+        params: search,
+      }),
+      providesTags: ["tashkilod"],
+    }),
+    addTashkilod: builder.mutation({
+      query: (formData) => ({
+        url: `/ijarachilar/`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["tashkilod"],
+    }),
+    updateTashkilod: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/tashkilot/${id}`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["tashkilod"],
+    }),
   }),
 });
 
 // Hooklar
 export const {
+  useUpdateTashkilodMutation,
+  useAddTashkilodMutation,
+  useGetTashkilodQuery,
   useGetAuthQuery,
   useGetArchivePdfQuery,
   useGetGeneralSearchQuery,

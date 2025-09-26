@@ -142,7 +142,7 @@ export default function AboutProgram() {
              bg-repeat 
              bg-center 
              bg-[length:400px_400px] 
-             opacity-20
+             opacity-20 
              pointer-events-none
              z-0"
         ></div>

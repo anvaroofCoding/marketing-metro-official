@@ -118,6 +118,9 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token_marketing", data.access);
+        if (!localStorage.getItem("sessionStart")) {
+          localStorage.setItem("sessionStart", Date.now());
+        }
         navigate("/");
       } else {
         notification.error({
