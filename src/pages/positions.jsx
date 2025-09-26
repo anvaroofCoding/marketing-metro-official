@@ -52,11 +52,7 @@ export default function AdvertisementDetail() {
     refetch,
   } = useGetAdventQuery();
 
-  const {
-    data: getTashkilod,
-    isLoadin: load,
-    isError: err,
-  } = useGetTashkilodQuery();
+  const { data: getTashkilod, isLoadin: load } = useGetTashkilodQuery();
 
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
@@ -68,7 +64,7 @@ export default function AdvertisementDetail() {
 
   if (getLoading || postLoading || updating || deleteLoading || load)
     return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="flex justify-center items-center h-screen">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600 font-medium">Yuklanmoqda...</p>
@@ -78,9 +74,9 @@ export default function AdvertisementDetail() {
 
   console.log(error);
 
-  if (getError || err)
+  if (getError)
     return (
-      <div className="w-full h-screen flex justify-center items-center bg-gradient-to-br from-slate-50 to-red-50">
+      <div className="w-full h-screen flex justify-center items-center">
         <div className="text-center bg-white rounded-3xl p-12 shadow-xl border border-red-100">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-slate-800 mb-2">
