@@ -3,7 +3,6 @@ import {
   Users,
   Code,
   Smartphone,
-  Globe,
   Star,
   Award,
   LucideLayoutDashboard,
@@ -13,21 +12,32 @@ import {
   Archive,
   SearchCheckIcon,
   LogIn,
+  Code2,
 } from "lucide-react";
+import Card from "./scrollAboutProgram";
+import DowloandsButton from "@/components/dowlaond";
 
 export default function AboutProgram() {
   const developers = [
     {
+      name: "Eltayev Elyor Rustamovich",
+      role: "Loyha muallifi",
+      avatar: "/raxbar2.jpg",
+      contribution: "Project Author",
+    },
+    {
       name: "Toshpo'lotov Feruz G'olib o'g'li",
-      role: "Proyekt boshqaruvchi",
+      role: "Project manager",
       avatar: "/xizmat.png",
-      contribution: "Dasturning yaratilishida boshqaruv",
+      contribution:
+        "Dasturning funksiyalari va uning belgilangan vaqta ishlab chiqishining boshqaruvi",
     },
     {
       name: "Anvarov Islomjon Toxir o'g'li",
       role: "Frontend dasturchi",
       avatar: "/Islom.JPG",
-      contribution: "Frontend arxitekturasi va UI/UX",
+      contribution:
+        "Frontend arxitekturasi || UI/UX || React || RTK Query || Tailwindcss",
     },
     {
       name: "Savriyev Sunnat Sobir o'g'li",
@@ -120,6 +130,17 @@ export default function AboutProgram() {
       ],
     },
     {
+      title: "Ijarachi tashkilotlar",
+      description: "bu sahifa orqali ijarachilarni ro'yxatlash",
+      icon: LogIn,
+      image: "/tashkilod.png",
+      features: [
+        "Icharachilarni qo'shish ko'rish ularni ma'lumotlarini o'zgartirish",
+        "Icharachilarning har birini qanday shartnomalari bor ularni ko'rish",
+        "Icharachilarni PDF va Excel holatida saqlash",
+      ],
+    },
+    {
       title: "Kirish",
       description: "Bu sahifa dasturga kirish qismi",
       icon: LogIn,
@@ -155,32 +176,32 @@ export default function AboutProgram() {
               <Code className="w-8 h-8 text-white" />
             </div>
             <h1 className="font-bold text-5xl text-white">
-              Dastur bilan tanishuv
+              Mreklama.tm1.uz dasturi haqida
             </h1>
           </div>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Dasturning asosiy maqsadi Toshkent Metropolitenning barcha
-            bekatlaridagi reklamalarni nazorat qilish va ularning shartnomalari
-            saqlash
+            Ushbu dastur Toshkent metropolitenining barcha bekatlari va
+            obyektlaridagi reklama materiallari to‘g‘risidagi ma’lumotlar bazasi
+            sifatida qo‘llaniladi.
           </p>
         </div>
       </div>
 
       {/* Development Team Section - Apple Style */}
-      <div className="max-w-7xl mx-auto px-6 mb-16">
+      <div className=" mx-auto px-6">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-3 mb-4">
             <Users className="w-8 h-8 text-blue-600" />
             <h2 className="text-4xl font-bold text-gray-900">
-              Ishlab chiqish jamoasi
+              Dastur yaratuvchilari
             </h2>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-4 gap-8">
           {developers.map((dev, index) => (
             <div key={index} className="group">
-              <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+              <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 h-85">
                 <div className="text-center">
                   <div className="relative mb-6">
                     <img
@@ -196,7 +217,7 @@ export default function AboutProgram() {
                     {dev.name}
                   </h3>
                   <p className="text-blue-600 font-medium mb-3">{dev.role}</p>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <p className="text-gray-600 text-[11px] leading-relaxed">
                     {dev.contribution}
                   </p>
                 </div>
@@ -206,8 +227,18 @@ export default function AboutProgram() {
         </div>
       </div>
 
+      <div className="py-20">
+        <div className="pb-10 text-center flex justify-center items-center gap-3">
+          <Code2 className="w-8 h-8 text-blue-600" />
+          <h2 className="text-4xl font-bold text-gray-900">
+            Dastur yaralishida ishlatilgan asosiy texnologiyalar
+          </h2>
+        </div>
+        <Card />
+      </div>
+
       {/* App Pages Section */}
-      <div className="max-w-7xl mx-auto px-6 mb-16">
+      <div className="mx-auto px-6 mb-16">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-3 mb-4">
             <Smartphone className="w-8 h-8 text-blue-600" />
@@ -275,35 +306,8 @@ export default function AboutProgram() {
         </div>
       </div>
 
-      {/* Technology Stack */}
-      <div className="max-w-7xl mx-auto px-6 mb-16 ">
-        <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 rounded-3xl p-12">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-3 mb-4">
-              <Globe className="w-8 h-8 text-white" />
-              <h2 className="text-3xl font-bold text-white">
-                Asosiy zamonaviy texnologiyalar
-              </h2>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-6">
-            {[
-              { name: "React", icon: "/React.png" },
-              { name: "Redux", icon: "/Redux.png" },
-              { name: "Python", icon: "/Python.png" },
-              { name: "PostgresSQL", icon: "/PostgresSQL.png" },
-            ].map((tech, index) => (
-              <div key={index} className="text-center">
-                <div className="bg-white/20 rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                  {/* <tech.icon className="w-8 h-8 text-blue-600 mx-auto mb-3" /> */}
-                  <img src={tech.icon} className="w-8 h-8 mx-auto mb-3" />
-                  <h3 className="font-semibold text-white">{tech.name}</h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="w-full flex justify-center py-10">
+        <DowloandsButton />
       </div>
 
       {/* Footer with National Pride */}
