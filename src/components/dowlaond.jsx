@@ -5,7 +5,7 @@ const DowloandsButton = () => {
   return (
     <StyledWrapper>
       <a href={pdf} download="marketing.pdf" className="buttonDownload">
-        Prezintatsiyani saqlash
+        Dastur haqidagi qo'llanmani saqlash
       </a>
     </StyledWrapper>
   );

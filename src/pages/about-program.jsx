@@ -21,29 +21,30 @@ export default function AboutProgram() {
   const developers = [
     {
       name: "Eltayev Elyor Rustamovich",
-      role: "Loyha muallifi",
+      role: "Project Author",
       avatar: "/raxbar2.jpg",
-      contribution: "Project Author",
+      contribution: "Loyiha muallifi",
     },
     {
       name: "Toshpo'lotov Feruz G'olib o'g'li",
       role: "Project manager",
       avatar: "/xizmat.png",
       contribution:
-        "Dasturning funksiyalari va uning belgilangan vaqta ishlab chiqishining boshqaruvi",
+        "Dasturning funksionalligi, texnik shartlari va uning belgilangan vaqtda ishlab chiqilishini boshqaruvi",
     },
     {
       name: "Anvarov Islomjon Toxir o'g'li",
-      role: "Frontend dasturchi",
+      role: "Frontend developer",
       avatar: "/Islom.JPG",
       contribution:
-        "Frontend arxitekturasi || UI/UX || React || RTK Query || Tailwindcss",
+        "Dasturning foydalanuvchiga maksimal qulaylik beruvchi dizayni va Frontend arxitekturasi || UI/UX || React || RTK Query || Tailwindcss",
     },
     {
       name: "Savriyev Sunnat Sobir o'g'li",
-      role: "Backend Dasturchi",
+      role: "Backend developer",
       avatar: "/sunnatchik.jpg",
-      contribution: "Data baza va API boshqaruvi",
+      contribution:
+        "Dasturning funksionalligi, bazaviy ma'lumotlarning sinxron ishlashi logikasi va Backend texnologiyalari || Ma'lumotlar bazasi ||APIlar boshqaruvi",
     },
   ];
 
@@ -231,7 +232,8 @@ export default function AboutProgram() {
         <div className="pb-10 text-center flex justify-center items-center gap-3">
           <Code2 className="w-8 h-8 text-blue-600" />
           <h2 className="text-4xl font-bold text-gray-900">
-            Dastur yaralishida ishlatilgan asosiy texnologiyalar
+            Dasturni ishlab chiqishda quyidagi zamonaviy texnologiyalardan
+            foydalanilgan.
           </h2>
         </div>
         <Card />
@@ -243,7 +245,7 @@ export default function AboutProgram() {
           <div className="inline-flex items-center gap-3 mb-4">
             <Smartphone className="w-8 h-8 text-blue-600" />
             <h2 className="text-4xl font-bold text-gray-900">
-              Dastur sahifalari
+              Dastur funksionalligi haqida
             </h2>
           </div>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
