@@ -176,7 +176,7 @@ export default function AboutProgram() {
               <Code className="w-8 h-8 text-white" />
             </div>
             <h1 className="font-bold text-5xl text-white">
-              Mreklama.tm1.uz dasturi haqida
+              Marketing.tm1.uz dasturi haqida
             </h1>
           </div>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
