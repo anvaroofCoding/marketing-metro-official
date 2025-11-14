@@ -101,19 +101,16 @@ export default function Login() {
     });
 
     try {
-      const response = await fetch(
-        "https://reklama-project.onrender.com/api/token/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            password,
-          }),
-        }
-      );
+      const response = await fetch("http://88.88.150.151:8090/api/token/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();

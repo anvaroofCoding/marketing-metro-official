@@ -53,24 +53,24 @@ const App = () => {
     navigate("/login");
   }
   return (
-    <div className="flex roboto">
+    <div className="flex roboto ">
       <Sidebar />
 
       <div
-        className={`relative w-full h-screen p-4 ${
+        className={`relative w-full h-screen  p-4 ${
           segment === "map" ? "overflow-hidden" : "overflow-y-auto"
         }`}
       >
         {/* Background with pattern */}
         <div
           className="fixed inset-0 
-             bg-[url('/naqsh1.jpg')] 
+             bg-[url('/yashil1.png')] 
              bg-repeat 
              bg-center 
              bg-[length:100px_100px] 
-             opacity-15 
+             opacity-10 
              pointer-events-none
-             -z-10" /* content orqasida turishi uchun */
+             -z-10"
         ></div>
 
         {/* Content */}

@@ -1,26 +1,29 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+const rawBaseQuery = fetchBaseQuery({
+  baseUrl: "http://88.88.150.151:8090/api",
+  credentials: "include",
+  prepareHeaders: (headers) => {
+    const token = localStorage.getItem("token_marketing");
+    if (token) headers.set("Authorization", `Bearer ${token}`);
+    return headers;
+  },
+});
+const baseQuery = async (args, api, extra) => {
+  const result = await rawBaseQuery(args, api, extra);
+  if (result.error?.status === 401 || result.error?.status === 403) {
+    // localStorage.removeItem("token_marketing");
+    window.location.href = "/error-403";
+  }
+  return result;
+};
 export const api = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "https://reklama-project.onrender.com/api",
-    credentials: "include", // cookie ishlatadi
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token_marketing");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery,
   tagTypes: ["Positions"],
-
   endpoints: (builder) => ({
-    // bitta stansiyani olish
     getStation: builder.query({
       query: (id) => `/stations/${id}/`,
     }),
-    // stansiyaga tegishli positionlarni olish
     getPositionsByStation: builder.query({
       query: ({ stationId, page = 1, limit = 10, search = "" }) => {
         let url = `/positions/?station=${stationId}&page=${page}&limit=${limit}`;
@@ -31,7 +34,6 @@ export const api = createApi({
       },
       providesTags: ["Positions"],
     }),
-    // position qo‘shish
     createPosition: builder.mutation({
       query: (body) => ({
         url: `/positions/`,
@@ -40,7 +42,6 @@ export const api = createApi({
       }),
       invalidatesTags: ["Positions"],
     }),
-    // position tahrirlash
     updatePosition: builder.mutation({
       query: ({ id, ...body }) => ({
         url: `/positions/${id}/`,
@@ -49,7 +50,6 @@ export const api = createApi({
       }),
       invalidatesTags: ["Positions"],
     }),
-    // position o‘chirish
     deletePosition: builder.mutation({
       query: (id) => ({
         url: `/positions/${id}/`,
@@ -95,7 +95,6 @@ export const api = createApi({
         };
       },
     }),
-    // arviv
     getArchive: builder.query({
       query: ({ page = 1, limit = 9, search = "" }) => ({
         url: `/advertisements-archive/`,
@@ -275,11 +274,42 @@ export const api = createApi({
       }),
       providesTags: ["tashkilod"],
     }),
+    getBanner: builder.query({
+      query: ({ page, search, limit }) => ({
+        url: `/turi/`,
+        params: { page, search, limit },
+      }),
+      providesTags: ["tashkilod"],
+    }),
+    addBanner: builder.mutation({
+      query: (formData) => ({
+        url: `/turi/`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["tashkilod"],
+    }),
+    updateBanner: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/turi/${id}/`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["tashkilod"],
+    }),
+    getReklama: builder.query({
+      query: (id) => ({
+        url: `/positions/${id}`,
+      }),
+      providesTags: ["tashkilod"],
+    }),
   }),
 });
-
-// Hooklar
 export const {
+  useGetReklamaQuery,
+  useUpdateBannerMutation,
+  useAddBannerMutation,
+  useGetBannerQuery,
   useGetTashkilodoptionsQuery,
   useGetTashkilodPdfQuery,
   useGetTashkilodExcelQuery,

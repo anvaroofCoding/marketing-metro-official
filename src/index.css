@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ultra&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Headland+One&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -406,7 +409,7 @@
   width: 12px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 102, 255, 0.658);
+  background-color: rgba(56, 134, 25, 0.658);
   border-radius: 6px;
 }
 ::-webkit-scrollbar-track {
@@ -427,4 +430,15 @@
 }
 .ant-table-bordered .ant-table-cell {
   @apply border border-gray-400;
+}
+.regular {
+  font-family: "Ultra", serif;
+  font-weight: 900;
+  font-style: normal;
+}
+.solid {
+  font-family: "Headland One", serif;
+}
+.ant-spin .ant-spin-dot-item {
+  background-color: #1a661e !important; /* sen xohlagan rang */
 }

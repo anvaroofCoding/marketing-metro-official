@@ -8,7 +8,6 @@ import {
 import { Modal, Spin } from "antd";
 import {
   Archive,
-  Building2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -17,36 +16,28 @@ import {
   LogOut,
   Map,
   Search,
+  TextSearch,
   User,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "@ant-design/v5-patch-for-react-19";
-
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [expandedItems, setExpandedItems] = useState(["/delays/"]);
-  const [collapsed, setCollapsed] = useState(false); // 🔥 sidebar collapse state
+  const [collapsed, setCollapsed] = useState(false);
   const { data: notiveData, isLoading: Endloading } = useGetNotiveQuery();
-  // 🔥 Online vaqt state
   const [onlineTime, setOnlineTime] = useState("00:00");
-
   const { data: userData, isLoading } = useGetMeQuery();
   const { data: deleyEnd, isLoading: delaysEndLoading } = useGetDelaysQuery();
-
-  // 🔥 Session Timer logikasi
   useEffect(() => {
     const savedStart = localStorage.getItem("sessionStart");
     if (!savedStart) return; // login qilmagan bo‘lsa
-
     const timer = setInterval(() => {
       const now = Date.now();
       const diff = now - parseInt(savedStart, 10);
-
-      // 9 soat o‘tib ketsa 00:00 ga qaytarish
       if (diff >= 9 * 60 * 60 * 1000) {
-        // 9 soat = 32400000 ms
         setOnlineTime("00:00");
         localStorage.removeItem("sessionStart");
         clearInterval(timer);
@@ -66,7 +57,6 @@ export default function Sidebar() {
 
     return () => clearInterval(timer);
   }, []);
-
   if (isLoading || Endloading || delaysEndLoading) {
     return (
       <div className="flex items-center justify-center h-screen w-85 ">
@@ -74,7 +64,6 @@ export default function Sidebar() {
       </div>
     );
   }
-
   const menuItems = [
     {
       key: "/",
@@ -85,27 +74,13 @@ export default function Sidebar() {
         </div>
       ),
     },
-    {
-      key: "/tashkilotni-royxatga-olish",
-      icon: <Building2 size={20} />,
-      label: (
-        <div className="flex justify-between items-center w-full">
-          <span>Toshkilotlarni ro'yxatga olish</span>
-        </div>
-      ),
-    },
+
     {
       key: "/map/",
       icon: <Map size={20} />,
       label: (
         <div className="flex justify-between items-center w-full">
           <span>Xarita</span>
-          <Badge
-            variant="secondary"
-            className="bg-yellow-500 text-white hover:bg-yellow-700 ml-2"
-          >
-            {notiveData?.stations}
-          </Badge>
         </div>
       ),
     },
@@ -115,12 +90,6 @@ export default function Sidebar() {
       label: (
         <div className="flex justify-between items-center w-full">
           <span>Arxiv</span>
-          <Badge
-            variant="secondary"
-            className="bg-blue-700 text-white hover:bg-green-900 ml-2"
-          >
-            {notiveData?.advertisement_archives}
-          </Badge>
         </div>
       ),
     },
@@ -130,12 +99,6 @@ export default function Sidebar() {
       label: (
         <div className="flex justify-between items-center w-full">
           <span>Umumiy reklamalar</span>
-          <Badge
-            variant="secondary"
-            className="bg-purple-700 text-white hover:bg-purple-900 ml-2"
-          >
-            {notiveData?.advertisements}
-          </Badge>
         </div>
       ),
     },
@@ -147,7 +110,7 @@ export default function Sidebar() {
           <span>Shartnomalar muddati</span>
           <Badge
             variant="secondary"
-            className="bg-green-600 text-white hover:bg-green-900 ml-2"
+            className="bg-green-100 text-green-900 hover:bg-green-100 ml-2"
           >
             {deleyEnd?.counts.haftada_tugaydigan + deleyEnd?.counts.tugagan}
           </Badge>
@@ -179,6 +142,33 @@ export default function Sidebar() {
               >
                 {deleyEnd?.counts.tugagan}
               </Badge>
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      key: "/Royxatlash",
+      icon: <TextSearch size={20} />,
+      label: (
+        <div className="flex justify-between items-center w-full">
+          <span>Ro'yhatga olish</span>
+        </div>
+      ),
+      children: [
+        {
+          key: "/tashkilotni-royxatga-olish",
+          label: (
+            <div className="flex justify-between items-center w-full">
+              <span>Tashkilodlar</span>
+            </div>
+          ),
+        },
+        {
+          key: "/Banner",
+          label: (
+            <div className="flex justify-between items-center w-full">
+              <span>Reklama Bannerlar</span>
             </div>
           ),
         },
@@ -240,21 +230,21 @@ export default function Sidebar() {
             ${level > 0 ? "ml-6 pl-8" : ""}
             ${
               isActive
-                ? "bg-gradient-to-r bg-blue-200 text-black shadow-lg "
-                : "text-white  hover:bg-blue-600 hover:text-white"
+                ? "bg-gradient-to-r bg-green-600 text-white shadow-lg "
+                : "text-white  hover:bg-green-500 hover:text-white"
             }
           `}
         >
           <div className="flex items-center space-x-3">
             {item.icon && (
-              <span className={isActive ? "text-black" : "text-white"}>
+              <span className={isActive ? "text-white" : "text-white"}>
                 {item.icon}
               </span>
             )}
             {!collapsed && <span className="font-medium">{item.label}</span>}
           </div>
           {hasChildren && !collapsed && (
-            <span className="text-gray-400">
+            <span className="text-white font-bold">
               {isExpanded ? (
                 <ChevronDown size={16} />
               ) : (
@@ -275,7 +265,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`h-screen  bg-[#1777FF]   
+      className={`h-screen  bg-[#155d27]   
              flex flex-col transition-all relative  duration-300 ${
                collapsed ? "w-20" : "w-85"
              }`}
@@ -297,12 +287,12 @@ export default function Sidebar() {
             <Link to={"/"}>
               <img src="/logos.png" alt="metro logo" className="w-10" />
             </Link>
-            <h1 className="text-2xl font-bold text-white">Marketing</h1>
+            <h1 className="text-2xl font-bold text-white solid">Marketing</h1>
           </div>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="text-white p-2 rounded-full hover:bg-blue-800 transition"
+          className="text-white p-2 rounded-full hover:bg-green-900 transition"
         >
           {collapsed ? <ChevronRight size={22} /> : <ChevronLeft size={22} />}
         </button>
@@ -317,17 +307,17 @@ export default function Sidebar() {
 
       {/* Account Section */}
       {!collapsed && (
-        <div className="p-4 relative z-10">
-          <div className="flex items-center space-x-3 mb-4 p-3 rounded-lg bg-white">
-            <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
-              <User size={20} className="text-white" />
+        <div className="p-4 relative z-10 ">
+          <div className="flex items-center space-x-3 mb-4 p-3 rounded-lg bg-green-600">
+            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+              <User size={20} className="text-green-900" />
             </div>
             <div className="flex-1">
-              <p className="text-md font-medium text-black truncate">
+              <p className="text-md font-medium text-white truncate">
                 {userData?.username}
               </p>
 
-              <p className="text-xs text-gray-500 font-bold"> ⏱ {onlineTime}</p>
+              <p className="text-xs text-gray-100 font-bold"> ⏱ {onlineTime}</p>
             </div>
           </div>
 
@@ -335,9 +325,9 @@ export default function Sidebar() {
           <Button
             onClick={handleLogout}
             variant="ghost"
-            className="w-full justify-start bg-red-600 text-gray-300 hover:text-white hover:bg-red-800 transition-colors"
+            className="w-full justify-start bg-red-600 text-gray-100 hover:text-white hover:bg-red-800 transition-colors"
           >
-            <LogOut size={20} className="mr-3" />
+            <LogOut size={20} className="mr-3 text-white" />
             Logout
           </Button>
         </div>

@@ -1,8 +1,10 @@
 import App from "@/App";
 import Login from "@/Auth/login";
+import Error_403 from "@/components/Error_403";
 import AboutProgram from "@/pages/about-program";
 import Archive from "@/pages/archive";
 import ShowArchive from "@/pages/archive-dails";
+import Banner from "@/pages/banner";
 import Dashboard from "@/pages/dashboard";
 import Delay7 from "@/pages/delay7";
 import DelayEnd from "@/pages/delayEnd";
@@ -47,7 +49,15 @@ export const router = createBrowserRouter([
         path: "/kechikishlar/:id",
         element: <Weekdaitail />,
       },
+      {
+        path: "/Banner",
+        element: <Banner />,
+      },
     ],
   },
   { path: "/login", element: <Login /> },
+  {
+    path: "/error-403",
+    element: <Error_403 />,
+  },
 ]);
