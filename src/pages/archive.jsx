@@ -3,7 +3,7 @@ import {
   FileExcelOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Button, Input, notification, Space, Spin, Table, Tooltip } from "antd";
+import { Button, Input, Space, Spin, Table, Tooltip } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,14 +11,13 @@ import {
   useGetArchiveQuery,
   useGetArchiveShowExcelQuery,
 } from "../services/api";
-
+import { toast, Toaster } from "sonner";
 export default function Archive() {
   const { Column, ColumnGroup } = Table;
-  const navigate = useNavigate();
-
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
   const { data: excelBlob, isFetching } = useGetArchiveShowExcelQuery();
   const { data: FilePdfFilled, isFetching: isFetchingPdf } =
     useGetArchivePdfQuery();
@@ -27,7 +26,6 @@ export default function Archive() {
     isLoading: archiveloading,
     error: archiveerror,
   } = useGetArchiveQuery({ page, limit, search });
-
   if (archiveloading) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -36,13 +34,13 @@ export default function Archive() {
     );
   }
   if (archiveerror) {
-    notification.error({ message: "Ma'lumotlarni yuklashda xatolik" });
+    toast.error(
+      "Biron bir xatolik chiqib qolgan ko'rinadi! Balki internetni tekshirib olarsiz?"
+    );
   }
-
-  function handleShow(ida) {
-    navigate(`/archive-show/${ida}/`);
+  function handleShow({ id, ids, arxiver }) {
+    navigate(`station/${id}/position/${ids}/${arxiver}`);
   }
-
   function handleDownloads() {
     if (!excelBlob) return;
     const url = window.URL.createObjectURL(excelBlob);
@@ -53,9 +51,8 @@ export default function Archive() {
     link.click();
     link.remove();
     window.URL.revokeObjectURL(url);
-    notification.success({ message: "Excel muvaffaqiyatli ko'chirildi" });
+    toast.success("Excel muvaffaqiyatli ko'chirildi!");
   }
-
   function handleDownloadsPdf() {
     if (!FilePdfFilled) return;
     const url = window.URL.createObjectURL(FilePdfFilled);
@@ -66,15 +63,13 @@ export default function Archive() {
     link.click();
     link.remove();
     window.URL.revokeObjectURL(url);
-    notification.success({ message: "PDf muvaffaqiyatli ko'chirildi" });
+    toast.success("PDf muvaffaqiyatli ko'chirildi!");
   }
-
   return (
     <div className="w-full h-full flex flex-col">
-      {/* Search qismi */}
       <div className="h-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2 p-2">
         <Input
-          placeholder="Qidirish..."
+          placeholder="Reklama nomi bo'yicha qidiring..."
           prefix={<SearchOutlined />}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -92,7 +87,8 @@ export default function Archive() {
           PDF ko'chirish
         </Button>
         <Button
-          type="primary"
+          variant="solid"
+          color="green"
           icon={<FileExcelOutlined />}
           onClick={handleDownloads}
           loading={isFetching}
@@ -102,8 +98,6 @@ export default function Archive() {
           Excel ko'chirish
         </Button>
       </div>
-
-      {/* Jadval qismi */}
       <div className="flex-1 w-full overflow-x-auto">
         <Table
           dataSource={data?.results}
@@ -114,10 +108,9 @@ export default function Archive() {
             total: data?.count,
             onChange: (p) => setPage(p),
           }}
-          scroll={{ x: "max-content" }} // kichik ekranlarda horizontal scroll
+          scroll={{ x: "max-content" }}
         >
           <ColumnGroup>
-            {/* <Column title="ID" dataIndex="id" key="id" responsive={["sm"]} /> */}
             <Column title="Ijarachi" dataIndex="Ijarachi" key="Ijarachi" />
             <Column
               title="Reklama nomi"
@@ -149,7 +142,7 @@ export default function Archive() {
             />
             <Column
               title="Telefon raqami"
-              dataIndex="contact_number"
+              dataIndex="ijarachi_contact"
               key="contact_number"
               responsive={["md"]}
             />
@@ -181,9 +174,16 @@ export default function Archive() {
                 <Space size="middle">
                   <Tooltip title="Batafsil ko'rish">
                     <Button
-                      type="primary"
+                      variant="solid"
+                      color="green"
                       size="small"
-                      onClick={() => handleShow(record.id)}
+                      onClick={() =>
+                        handleShow({
+                          id: record?.station,
+                          ids: record?.position,
+                          arxiver: record.id,
+                        })
+                      }
                     >
                       <EyeOutlined />
                     </Button>

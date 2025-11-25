@@ -1,5 +1,3 @@
-import Paid from "@/components/paid";
-import { useDeleteAdventBekatPaidMutation } from "@/services/api";
 import {
   Card,
   Divider,
@@ -9,9 +7,6 @@ import {
   Empty,
   Badge,
   Button,
-  Menu,
-  Popconfirm,
-  Dropdown,
 } from "antd";
 import {
   Calendar,
@@ -22,10 +17,7 @@ import {
   ImageUp,
   File,
   BanknoteArrowDown,
-  Trash2,
-  MoreHorizontal,
 } from "lucide-react";
-import { toast } from "sonner";
 const { Title } = Typography;
 function formatDate(dateString) {
   if (!dateString) return "—";
@@ -41,18 +33,7 @@ function formatDate(dateString) {
     return dateString;
   }
 }
-export default function ReklamaDetails({ data }) {
-  const adv = data?.advertisement;
-  const [deleteAdv, { isLoading }] = useDeleteAdventBekatPaidMutation();
-  const onDelete = async (id) => {
-    try {
-      await deleteAdv(id).unwrap();
-      toast.success(`To'lov o‘chirildi ${id}`);
-    } catch (e) {
-      toast.error("O‘chirishda xatolik");
-      console.log(e);
-    }
-  };
+export default function Train_Archive_Paid({ data }) {
   return (
     <div className="w-full mt-10 ">
       <Card className="rounded-2xl shadow-xl bg-white">
@@ -62,9 +43,7 @@ export default function ReklamaDetails({ data }) {
             Reklama ma'lumotlari
           </Title>
         </div>
-
         <Divider />
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Chap blok */}
           <Card className="rounded-xl shadow-md bg-green-50 border-none p-4">
@@ -72,40 +51,44 @@ export default function ReklamaDetails({ data }) {
               <p className="flex items-center gap-2 text-green-900">
                 <Ruler size={20} />
                 <span className="font-semibold">Egallangan maydon:</span>
-                {adv?.Egallagan_maydon} {adv?.O_lchov_birligi}
+                {data?.Egallagan_maydon} {data?.O_lchov_birligi}
               </p>
 
               <p className="flex items-center gap-2 text-green-900">
                 <Wallet size={20} />
                 <span className="font-semibold">Banner narxi:</span>
                 <Tag color="green" className="text-base px-2 py-1">
-                  {adv?.Qurilma_narxi} so'm
+                  {data?.Qurilma_narxi} so'm
                 </Tag>
               </p>
-
               <p className="flex items-center gap-2 text-green-900">
                 <FileText size={20} />
                 <span className="font-semibold">Shartnoma raqami:</span>
-                {adv?.Shartnoma_raqami}
+                {data?.Shartnoma_raqami}
               </p>
-
               <p className="flex items-center gap-2 text-green-900">
                 <Calendar size={20} />
                 <span className="font-semibold">Yaratilgan sana:</span>
-                {adv?.created_at}
+                {new Date(data?.created_at).toLocaleString("uz-UZ", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </p>
 
               <p className="flex items-center gap-2 text-green-900">
                 <User size={20} />
                 <span className="font-semibold">Yaratuvchi:</span>
-                <Tag color="blue">{adv?.created_by}</Tag>
+                <Tag color="blue">{data?.user}</Tag>
               </p>
               <p className="flex items-center gap-2 text-green-900">
                 <ImageUp size={20} />
                 <span className="font-semibold">Reklama rasmi:</span>
-                {adv?.photo && (
+                {data?.photo && (
                   <a
-                    href={adv.photo}
+                    href={data.photo}
                     download="reklama_rasmi.jpg" // Fayl nomini xohlagancha qo'yish mumkin
                     target="_blank"
                     rel="noopener noreferrer"
@@ -116,13 +99,12 @@ export default function ReklamaDetails({ data }) {
                   </a>
                 )}
               </p>
-
               <p className="flex items-center gap-2 text-green-900">
                 <File size={20} />
                 <span className="font-semibold">Shartnoma fayli:</span>
-                {adv?.Shartnoma_fayl && (
+                {data?.Shartnoma_fayl && (
                   <a
-                    href={adv.Shartnoma_fayl}
+                    href={data.Shartnoma_fayl}
                     download="shartnoma.pdf" // Fayl nomini o'zingiz belgilashingiz mumkin
                     target="_blank"
                     rel="noopener noreferrer"
@@ -135,8 +117,6 @@ export default function ReklamaDetails({ data }) {
               </p>
             </div>
           </Card>
-
-          {/* O'ng blok */}
           <Card className="rounded-xl shadow-md bg-green-50 border-none p-4">
             <div className="flex justify-between items-center">
               <Title
@@ -145,68 +125,33 @@ export default function ReklamaDetails({ data }) {
               >
                 <Wallet size={20} /> To'lovlar ro'yxati
               </Title>
-              <Paid id={adv.id} />
             </div>
 
-            {adv?.tolovlar?.length ? (
+            {data?.tolovlar?.length ? (
               <List
                 bordered={false}
-                dataSource={adv?.tolovlar}
-                renderItem={(item) => {
-                  const menu = (
-                    <Menu>
-                      <Menu.Item key="delete">
-                        <Popconfirm
-                          title="Rostdan ham o‘chirmoqchimisiz?"
-                          okText={isLoading ? "O'chirilmoqda" : "Ha"}
-                          cancelText="Yo‘q"
-                          onConfirm={() => onDelete(item.id)}
-                        >
-                          <div className="flex items-center gap-2 text-red-600 cursor-pointer">
-                            <Trash2 size={16} />
-                            <span>O‘chirish</span>
-                          </div>
-                        </Popconfirm>
-                      </Menu.Item>
-                    </Menu>
-                  );
-
-                  return (
-                    <div className="flex justify-between text-lg bg-green-100/80 p-2 rounded-lg my-3 items-start relative">
-                      {/* Chap qism */}
-                      <div className="flex flex-col w-[75%]">
-                        <p className="text-sm font-bold">
-                          {formatDate(item?.created_at)}
-                        </p>
-                        <p className="text-xs break-words">{item?.comment}</p>
-                      </div>
-
-                      {/* Summa */}
-                      <h2 className="text-base px-2 py-1 text-green-800 font-bold whitespace-nowrap">
-                        +
-                        {Number(item?.Shartnomasummasi).toLocaleString("uz-UZ")}{" "}
-                        so'm
-                      </h2>
-
-                      <Dropdown
-                        overlay={menu}
-                        trigger={["click"]}
-                        placement="bottomRight"
-                      >
-                        <button className="ml-2 text-gray-600 hover:text-gray-800">
-                          <MoreHorizontal size={18} />
-                        </button>
-                      </Dropdown>
+                dataSource={data?.tolovlar}
+                renderItem={(item) => (
+                  <div className="flex justify-between text-lg bg-green-100/80 p-2 rounded-lg my-3 mt-">
+                    <div className="flex flex-col">
+                      <p className="text-sm font-bold">
+                        {formatDate(item?.created_at)}
+                      </p>
+                      <p className="text-xs break-words">{item?.comment}</p>
                     </div>
-                  );
-                }}
+                    <h2 className="text-base px-2 py-1 text-green-800 font-bold">
+                      +{Number(item?.Shartnomasummasi).toLocaleString("uz-UZ")}{" "}
+                      so'm
+                    </h2>
+                  </div>
+                )}
               >
                 <p className="flex items-center gap-2 text-green-900 text-2xl">
                   <BanknoteArrowDown size={30} />
                   <span className="font-semibold">Jami to'lovlar:</span>
-                  <span className="font-bold">
-                    {Number(adv?.jami_tolov).toLocaleString("uz-UZ")} So'm
-                  </span>
+                  <p className="font-bold">
+                    {Number(data?.jami_tolov).toLocaleString("uz-UZ")} So'm
+                  </p>
                 </p>
               </List>
             ) : (

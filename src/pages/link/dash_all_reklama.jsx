@@ -1,11 +1,13 @@
-import { useGetTimeTugaganQuery } from "@/services/api";
+import { useGetSearchsIdQuery } from "@/services/api";
 import { Image, Spin, Tag } from "antd";
 import { useParams } from "react-router-dom";
 import { Phone, Building2, CalendarDays, FileText, MapPin } from "lucide-react";
-import General_Rek_Paid from "./generak_rek_paid";
-export default function Weekdaitail() {
+import General_Rek_Paid from "../generak_rek_paid";
+
+export default function Dash_All_Reklama() {
   const { ida } = useParams();
-  const { data, isLoading, error } = useGetTimeTugaganQuery(ida);
+  const { data, isLoading, error } = useGetSearchsIdQuery(ida);
+  console.log(data);
   if (isLoading)
     return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -13,7 +15,6 @@ export default function Weekdaitail() {
       </div>
     );
   if (error) return <div>Error: {error.message}</div>;
-  console.log(data);
   return (
     <div className="w-full ">
       <div className="relative w-full bg-gradient-to-r from-[#2c6e49] to-[#1f4d36] rounded-xl p-6 shadow-lg overflow-hidden">
@@ -21,13 +22,13 @@ export default function Weekdaitail() {
           className="absolute inset-0 bg-[url('/naqshtitle.png')] 
 		  bg-repeat opacity-10 pointer-events-none"
         />
+
         <div className="relative z-10">
           {/* Title */}
           <div className="flex items-center justify-between">
             <h1 className="text-green-50 text-3xl font-bold leading-snug mb-4 flex items-center gap-2">
               <MapPin size={26} />
-              {data?.station} bekatidagi {data?.position_number}-joyda turgan
-              reklama
+              {data?.station} bekatidagi {data?.position}-joyda turgan reklama
             </h1>
           </div>
 

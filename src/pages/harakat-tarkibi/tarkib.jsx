@@ -1,54 +1,47 @@
-"use client";
-
+import { SearchOutlined, UploadOutlined } from "@ant-design/icons";
 import {
-  CloudDownloadOutlined,
-  PlusCircleFilled,
-  PlusOutlined,
-  SearchOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
-import { Button, Form, Input, Modal, Pagination, Spin, Upload } from "antd";
+  Button,
+  Form,
+  Image,
+  Input,
+  Modal,
+  Pagination,
+  Select,
+  Spin,
+  Upload,
+} from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  useGetTashkilodQuery,
-  useUpdateTashkilodMutation,
-  useGetTashkilodExcelQuery,
-  useGetTashkilodPdfQuery,
-} from "../services/api";
 import { Edit2, Eye } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { openModal } from "@/services/modalSplice";
-import PostTashkilot from "@/components/postTashkilot";
 import { toast } from "sonner";
-
-export default function Tashkilot() {
+import {
+  useGetDepoQuery,
+  useGetTarkibQuery,
+  useUpdateTarkibMutation,
+} from "@/services/api";
+import PostTarkib from "@/components/postTarkib";
+import { useNavigate } from "react-router-dom";
+export default function Tarkib() {
   const [editingId, setEditingId] = useState(null);
-  const [updateTashkilod, { isLoading }] = useUpdateTashkilodMutation();
+  const [updateTashkilod, { isLoading }] = useUpdateTarkibMutation();
   const [file, setFile] = useState(null);
   const [value, setValue] = useState("");
   const [preview, setPreview] = useState(null);
   const [form] = Form.useForm();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const limit = 24;
-  const { data: positions, isLoading: positionsLoading } = useGetTashkilodQuery(
-    {
-      search: value,
-      page,
-      limit,
-    }
-  );
-  const { data: excelBlob, isFetching } = useGetTashkilodExcelQuery();
-  const { data: pdfBlob, isFetching: isFetchingPdf } =
-    useGetTashkilodPdfQuery();
+  const navigate = useNavigate();
+  const limit = 28;
+  const { data: tarkib, isLoading: positionsLoading } = useGetTarkibQuery({
+    search: value,
+    page,
+    limit,
+  });
+  const { data: depo, isLoading: loadin } = useGetDepoQuery();
   const handleEditSubmit = async (values) => {
     const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("contact_number", values.contact_number);
-    if (file) formData.append("logo", file, file.name);
+    formData.append("tarkib", values.tarkib);
+    formData.append("depo_id", values.depo_id);
+    if (file) formData.append("schema_image", file, file.name);
     try {
       await updateTashkilod({ id: editingId, formData }).unwrap();
       toast.success("Ma'lumot muvaffaqiyatli tahrirlandi");
@@ -60,19 +53,8 @@ export default function Tashkilot() {
       toast.error(
         "Xatolik yuz berdi, iltimos qayta urinib ko'ring" + " " + err?.message
       );
+      console.log(err);
     }
-  };
-  const downloadFile = (blob, filename) => {
-    if (!blob) return;
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", filename);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
-    toast.success("Fayl muvaffaqiyatli ko'chirildi");
   };
   const handleUpload = (fileObj) => {
     const url = URL.createObjectURL(fileObj);
@@ -85,21 +67,20 @@ export default function Tashkilot() {
       if (preview) URL.revokeObjectURL(preview);
     };
   }, [preview]);
-  if (positionsLoading || isFetching || isFetchingPdf) {
+  if (positionsLoading || loadin) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <Spin size="large" />
       </div>
     );
   }
-  console.log(positions);
   return (
     <div className="w-full min-h-screen ">
       <div>
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-green-800 mb-6 solid">
-            Tashkilodlarni ro'yxatga olish
+            Harakat tarkiblari ro'yxati
           </h1>
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <Input
@@ -111,88 +92,73 @@ export default function Tashkilot() {
               variant="outlined"
               className="md:flex-1 bg-transparent"
             />
-            <Button
-              onClick={() => downloadFile(excelBlob, "Tashkilotlar.xlsx")}
-              loading={isFetching}
-              icon={<CloudDownloadOutlined />}
-              size="middle"
-              color="lime"
-              variant="solid"
-            >
-              Excel
-            </Button>
-            <Button
-              onClick={() => downloadFile(pdfBlob, "Tashkilotlar.pdf")}
-              loading={isFetchingPdf}
-              icon={<CloudDownloadOutlined />}
-              size="middle"
-              color="orange"
-              variant="solid"
-            >
-              PDF
-            </Button>
-            <Button
-              variant="solid"
-              color="green"
-              icon={<PlusOutlined />}
-              onClick={() => dispatch(openModal())}
-              size="middle"
-            >
-              Qo'shish
-            </Button>
+            <PostTarkib />
           </div>
         </div>
 
-        {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-          {positions?.results?.map((record) => (
+          {tarkib?.results?.map((record) => (
             <div
               key={record.id}
               className="bg-white rounded-lg p-4 border border-gray-200"
             >
               <div className="mb-4 flex justify-start items-center gap-4">
                 <div>
-                  <img
-                    src={record.logo || "/placeholder.svg"}
+                  <Image
+                    src={record.schema_image || "/placeholder.svg"}
                     alt={record.name}
                     className="w-20 h-20 rounded-full"
+                    width={100}
                   />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 text-sm mb-2 line-clamp-2">
-                    {record.name}
+                    {record.depo}
                   </h3>
                   <p className="text-xs text-gray-600 mt-1">
-                    {record.contact_number || "N/A"}
+                    {record.tarkib || "N/A"}
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 w-full">
+                <a
+                  href={record?.schema_image}
+                  download
+                  className="w-full"
+                  target="_blank"
+                >
+                  <Button
+                    variant="solid"
+                    color="green"
+                    size="small"
+                    block
+                    icon={<Eye size={14} />}
+                  >
+                    Chizmani ko'rish
+                  </Button>
+                </a>
                 <Button
                   variant="solid"
-                  color="green"
+                  color="blue"
                   size="small"
                   block
-                  onClick={() =>
-                    navigate(
-                      record.advertisement
-                        ? `/${record.id}`
-                        : `/tashkilotni-royxatga-olish/${record.id}`
-                    )
-                  }
                   icon={<Eye size={14} />}
+                  onClick={() => {
+                    navigate(`/train/${record.id}`);
+                  }}
                 >
-                  Ko'rish
+                  Joylarni ko'rish
                 </Button>
                 <Button
                   size="small"
+                  style={{ padding: "3px" }}
                   onClick={() => {
                     setEditingId(record.id);
                     form.setFieldsValue({
-                      name: record.name,
-                      contact_number: record.contact_number,
+                      tarkib: record.tarkib,
+                      depo_id: record.depo_id,
                     });
-                    if (record.logo) setPreview(record.logo);
+                    if (record.schema_image) setPreview(record.schema_image);
                     setOpen(true);
                   }}
                   variant="solid"
@@ -204,35 +170,28 @@ export default function Tashkilot() {
           ))}
         </div>
 
-        {positions?.results && (
+        {tarkib?.results && (
           <div className="flex justify-end">
             <Pagination
               current={page}
               pageSize={limit}
-              total={positions.count}
+              total={tarkib.count}
               onChange={(p) => setPage(p)}
             />
           </div>
         )}
-        {positions?.results?.length === 0 && (
+        {tarkib?.results?.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-600 mb-4">
               Hech qanday tashkilot topilmadi
             </p>
-            <Button
-              type="primary"
-              onClick={() => dispatch(openModal())}
-              size="large"
-            >
-              Yangi tashkilot qo'shish
-            </Button>
           </div>
         )}
       </div>
 
       <Modal
         centered
-        title="Tashkilotni tahrirlash"
+        title="Harakat tarkibini tahrirlash"
         open={open}
         onOk={() => form.submit()}
         onCancel={() => {
@@ -241,27 +200,35 @@ export default function Tashkilot() {
           setFile(null);
           setPreview(null);
         }}
-        okText="Tahrirlashni saqlash"
+        okText={isLoading ? "Saqlanmoqda..." : "Saqlash"}
         cancelText="Bekor qilish"
       >
         <Form form={form} layout="vertical" onFinish={handleEditSubmit}>
           <Form.Item
-            name="name"
-            label="Nomi"
+            name="tarkib"
+            label="Harakat tarkibi nomi"
             rules={[{ required: true, message: "Nomi kerak!" }]}
           >
-            <Input placeholder="Tashkilot nomi" />
+            <Input placeholder="0001-0002-0003-0004" />
           </Form.Item>
 
           <Form.Item
-            name="contact_number"
-            label="Telefon"
-            rules={[{ required: true, message: "Telefon kerak!" }]}
+            name="depo_id"
+            label="Depo nomi"
+            rules={[{ required: true, message: "Depo nomi kerak!" }]}
           >
-            <Input placeholder="+998 90 123 45 67" />
+            <Select
+              placeholder="Deponi tanlang"
+              options={
+                depo?.results?.map((item) => ({
+                  value: item.id,
+                  label: item.nomi,
+                })) || []
+              }
+            />
           </Form.Item>
 
-          <Form.Item label="Logo">
+          <Form.Item label="Harakat tarkib rasmi">
             <Upload
               beforeUpload={handleUpload}
               showUploadList={false}
@@ -279,8 +246,6 @@ export default function Tashkilot() {
           </Form.Item>
         </Form>
       </Modal>
-
-      <PostTashkilot />
     </div>
   );
 }

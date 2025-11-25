@@ -1,5 +1,3 @@
-import Paid from "@/components/paid";
-import { useDeleteAdventBekatPaidMutation } from "@/services/api";
 import {
   Card,
   Divider,
@@ -9,8 +7,8 @@ import {
   Empty,
   Badge,
   Button,
-  Menu,
   Popconfirm,
+  Menu,
   Dropdown,
 } from "antd";
 import {
@@ -25,7 +23,10 @@ import {
   Trash2,
   MoreHorizontal,
 } from "lucide-react";
+import Train_adv_paid from "./train_adv_paid";
 import { toast } from "sonner";
+import { useState } from "react";
+import { useDeleteAdventTrainPaidMutation } from "@/services/api";
 const { Title } = Typography;
 function formatDate(dateString) {
   if (!dateString) return "—";
@@ -41,9 +42,9 @@ function formatDate(dateString) {
     return dateString;
   }
 }
-export default function ReklamaDetails({ data }) {
-  const adv = data?.advertisement;
-  const [deleteAdv, { isLoading }] = useDeleteAdventBekatPaidMutation();
+export default function Position_adv_one({ data }) {
+  const adv = data?.tarkib_advertisement;
+  const [deleteAdv, { isLoading }] = useDeleteAdventTrainPaidMutation();
   const onDelete = async (id) => {
     try {
       await deleteAdv(id).unwrap();
@@ -53,18 +54,17 @@ export default function ReklamaDetails({ data }) {
       console.log(e);
     }
   };
+
   return (
     <div className="w-full mt-10 ">
       <Card className="rounded-2xl shadow-xl bg-white">
         <div className="flex items-center gap-3">
           <Badge color="green" />
           <Title level={2} className="text-green-800 font-bold">
-            Reklama ma'lumotlari
+            Harakat tarkibidagi reklama ma'lumotlari
           </Title>
         </div>
-
         <Divider />
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Chap blok */}
           <Card className="rounded-xl shadow-md bg-green-50 border-none p-4">
@@ -74,7 +74,6 @@ export default function ReklamaDetails({ data }) {
                 <span className="font-semibold">Egallangan maydon:</span>
                 {adv?.Egallagan_maydon} {adv?.O_lchov_birligi}
               </p>
-
               <p className="flex items-center gap-2 text-green-900">
                 <Wallet size={20} />
                 <span className="font-semibold">Banner narxi:</span>
@@ -82,19 +81,16 @@ export default function ReklamaDetails({ data }) {
                   {adv?.Qurilma_narxi} so'm
                 </Tag>
               </p>
-
               <p className="flex items-center gap-2 text-green-900">
                 <FileText size={20} />
                 <span className="font-semibold">Shartnoma raqami:</span>
                 {adv?.Shartnoma_raqami}
               </p>
-
               <p className="flex items-center gap-2 text-green-900">
                 <Calendar size={20} />
                 <span className="font-semibold">Yaratilgan sana:</span>
                 {adv?.created_at}
               </p>
-
               <p className="flex items-center gap-2 text-green-900">
                 <User size={20} />
                 <span className="font-semibold">Yaratuvchi:</span>
@@ -106,7 +102,7 @@ export default function ReklamaDetails({ data }) {
                 {adv?.photo && (
                   <a
                     href={adv.photo}
-                    download="reklama_rasmi.jpg" // Fayl nomini xohlagancha qo'yish mumkin
+                    download="reklama_rasmi.jpg"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -116,14 +112,13 @@ export default function ReklamaDetails({ data }) {
                   </a>
                 )}
               </p>
-
               <p className="flex items-center gap-2 text-green-900">
                 <File size={20} />
                 <span className="font-semibold">Shartnoma fayli:</span>
                 {adv?.Shartnoma_fayl && (
                   <a
                     href={adv.Shartnoma_fayl}
-                    download="shartnoma.pdf" // Fayl nomini o'zingiz belgilashingiz mumkin
+                    download="shartnoma.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -135,8 +130,6 @@ export default function ReklamaDetails({ data }) {
               </p>
             </div>
           </Card>
-
-          {/* O'ng blok */}
           <Card className="rounded-xl shadow-md bg-green-50 border-none p-4">
             <div className="flex justify-between items-center">
               <Title
@@ -145,14 +138,14 @@ export default function ReklamaDetails({ data }) {
               >
                 <Wallet size={20} /> To'lovlar ro'yxati
               </Title>
-              <Paid id={adv.id} />
+              <Train_adv_paid id={adv?.id} />
             </div>
-
             {adv?.tolovlar?.length ? (
               <List
                 bordered={false}
                 dataSource={adv?.tolovlar}
                 renderItem={(item) => {
+                  // Dropdown menyusi
                   const menu = (
                     <Menu>
                       <Menu.Item key="delete">

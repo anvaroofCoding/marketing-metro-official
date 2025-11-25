@@ -59,7 +59,7 @@ export default function Banner() {
       <div>
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl font-bold text-green-800 mb-6 solid">
             Bannerlarni ro'yhatga olish
           </h1>
           <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -73,7 +73,8 @@ export default function Banner() {
               className="md:flex-1 bg-transparent"
             />
             <Button
-              type="primary"
+              variant="solid"
+              color="green"
               icon={<PlusOutlined />}
               onClick={() => dispatch(openModal())}
               size="middle"

@@ -2,7 +2,7 @@ import {
   useGetStatistikcPhotosQuery,
   useGetStatistikcQuery,
 } from "../services/api";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   TrendingUpIcon,
   UsersIcon,
@@ -17,18 +17,17 @@ import {
   TargetIcon,
   ZapIcon,
   BadgeCheck,
+  BanknoteArrowDown,
 } from "lucide-react";
 import { Spin } from "antd";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { data: StatistikData, isLoading } = useGetStatistikcQuery();
   const { data: statistikPhotosData, isLoading: statistikLoading } =
     useGetStatistikcPhotosQuery();
-  // const carouselRef = useRef(null);
   const [animatedCards, setAnimatedCards] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  // Animate cards on load
   useEffect(() => {
     if (StatistikData?.counts) {
       StatistikData.counts.forEach((_, index) => {
@@ -38,8 +37,6 @@ const Dashboard = () => {
       });
     }
   }, [StatistikData]);
-
-  // Auto-advance carousel
   useEffect(() => {
     if (statistikPhotosData && statistikPhotosData.length > 0) {
       const interval = setInterval(() => {
@@ -48,12 +45,11 @@ const Dashboard = () => {
       return () => clearInterval(interval);
     }
   }, [statistikPhotosData]);
-
   const getStatIcon = (index) => {
     const icons = [
       <TrendingUpIcon key="icon1" className="w-6 h-6" />,
       <UsersIcon key="icon2" className="w-6 h-6" />,
-      <DollarSignIcon key="icon3" className="w-6 h-6" />,
+      <BanknoteArrowDown key="icon3" className="w-6 h-6" />,
       <BarChart3Icon key="icon4" className="w-6 h-6" />,
       <ActivityIcon key="icon5" className="w-6 h-6" />,
       <TargetIcon key="icon6" className="w-6 h-6" />,
@@ -61,7 +57,6 @@ const Dashboard = () => {
     ];
     return icons[index % icons.length];
   };
-
   const getStatColor = (index) => {
     const colors = [
       {
@@ -70,34 +65,19 @@ const Dashboard = () => {
         glow: "emerald-500/20",
       },
       {
-        bg: "from-blue-500 via-blue-600 to-indigo-600",
-        accent: "blue-500",
-        glow: "blue-500/20",
+        bg: "from-emerald-500 via-emerald-600 to-teal-600",
+        accent: "emerald-500",
+        glow: "emerald-500/20",
       },
       {
-        bg: "from-violet-500 via-purple-600 to-indigo-600",
-        accent: "violet-500",
-        glow: "violet-500/20",
+        bg: "from-emerald-500 via-emerald-600 to-teal-600",
+        accent: "emerald-500",
+        glow: "emerald-500/20",
       },
       {
-        bg: "from-orange-500 via-red-500 to-pink-600",
-        accent: "orange-500",
-        glow: "orange-500/20",
-      },
-      {
-        bg: "from-cyan-500 via-teal-600 to-blue-600",
-        accent: "cyan-500",
-        glow: "cyan-500/20",
-      },
-      {
-        bg: "from-rose-500 via-pink-600 to-purple-600",
-        accent: "rose-500",
-        glow: "rose-500/20",
-      },
-      {
-        bg: "from-amber-500 via-yellow-600 to-orange-600",
-        accent: "amber-500",
-        glow: "amber-500/20",
+        bg: "from-emerald-500 via-emerald-600 to-teal-600",
+        accent: "emerald-500",
+        glow: "emerald-500/20",
       },
     ];
     return colors[index % colors.length];
@@ -126,10 +106,26 @@ const Dashboard = () => {
     }
   };
 
+  function getLink(item) {
+    switch (item.name) {
+      case "total_count":
+        return `/All/advertisement/liniya`;
+
+      case "hamkor_tashkilot_soni":
+        return `/All/advertisement/partner`;
+
+      case "reklamadan_tushadigan_umumiy_summa":
+        return `/All/advertisement/sum`;
+
+      default:
+        return "/";
+    }
+  }
+
+  console.log(StatistikData);
   return (
     <div className="min-h-screen overflow-y-auto">
-      {/* Header with enhanced gradient and animation */}
-      <div className="relative bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500 rounded-3xl border border-slate-200/20 p-8 mb-8 mx-4 mt-4 overflow-hidden">
+      <div className="relative bg-gradient-to-r from-green-800 via-green-800 to-green-800 rounded-3xl border border-slate-200/20 p-8 mb-8 overflow-hidden">
         <div
           className="absolute inset-0 
              bg-[url('/naqshtitle.png')] 
@@ -140,100 +136,101 @@ const Dashboard = () => {
              pointer-events-none
              z-0"
         ></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-indigo-600/10 animate-pulse"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-green-600/10 via-green-600/10 to-green-600/10 animate-pulse"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-green-500/10 to-green-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="relative z-10">
-          <h1 className="font-bold text-4xl text-white animate-fade-in">
-            Reklamalar Statistikasi
+          <h1 className="font-bold text-4xl text-white animate-fade-in solid">
+            Dashboard
           </h1>
         </div>
       </div>
 
-      {/* Enhanced Statistics Cards */}
-      <div className="px-4 mb-8">
+      <div className=" mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
           {StatistikData?.counts?.map((item, index) => {
             const colors = getStatColor(index);
             const isAnimated = animatedCards.includes(index);
-
             return (
-              <div
-                key={item.id}
-                className={`group relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
-                  isAnimated ? "animate-fade-in-up" : "opacity-0"
-                }`}
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {/* Glow effect */}
+              <Link key={index} to={getLink(item)}>
                 <div
-                  className={`absolute inset-0 bg-gradient-to-r ${colors.bg} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}
-                ></div>
-
-                {/* Progress bar */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent">
+                  className={`group relative bg-green-800 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
+                    isAnimated ? "animate-fade-in-up" : "opacity-0"
+                  }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
                   <div
-                    className={`h-full bg-gradient-to-r ${colors.bg} rounded-full animate-pulse`}
-                    style={{
-                      width: `${Math.min((item.value / 1000) * 100, 100)}%`,
-                    }}
+                    className="absolute inset-0 
+        bg-[url('/naqshtitle.png')] 
+        bg-repeat 
+        bg-center 
+        bg-[length:400px_400px] 
+        opacity-20
+        pointer-events-none
+        z-0"
                   ></div>
-                </div>
 
-                <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-4">
-                    <div
-                      className={`p-3 rounded-xl bg-gradient-to-br ${colors.bg} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      {getStatIcon(index)}
-                    </div>
-                    <div
-                      className={`w-2 h-2 bg-${colors.accent} rounded-full animate-pulse`}
-                    ></div>
-                  </div>
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-r ${colors.bg} opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300`}
+                  ></div>
 
-                  <div className="space-y-2">
-                    <div className="text-3xl font-bold text-slate-800 tabular-nums">
-                      {item.value.toLocaleString()}
-                    </div>
-                    <div className="text-sm font-semibold text-slate-600 capitalize tracking-wide">
-                      {item.color || "Metric"}
-                    </div>
-                  </div>
-
-                  {/* Animated progress indicator */}
-                  <div className="mt-4 flex items-center space-x-2">
-                    <div className="flex-1 bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-4">
                       <div
-                        className={`h-full bg-gradient-to-r ${colors.bg} rounded-full transition-all duration-1000 ease-out`}
-                        style={{
-                          width: `${Math.min((item.value / 1000) * 100, 100)}%`,
-                        }}
-                      ></div>
+                        className={`p-3 rounded-xl bg-white text-green-800 shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                      >
+                        {getStatIcon(index)}
+                      </div>
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
                     </div>
-                    <span className="text-xs font-medium text-slate-500">
-                      {Math.min(Math.round((item.value / 1000) * 100), 100)}%
-                    </span>
+
+                    <div className="space-y-2">
+                      <div className="text-3xl font-bold text-white tabular-nums">
+                        {item.color === "reklamadan tushadigan umumiy summa"
+                          ? item.value.toLocaleString() + " So'm"
+                          : item.value.toLocaleString()}
+                      </div>
+                      <div className="text-sm font-semibold text-white capitalize tracking-wide">
+                        {item.color}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center space-x-2">
+                      <div className="flex-1 bg-slate-200 rounded-full h-2 overflow-hidden">
+                        <div
+                          className={`h-full bg-gradient-to-r ${colors.bg} rounded-full transition-all duration-1000 ease-out`}
+                          style={{
+                            width: `${Math.min(
+                              (item.value / 1000) * 100,
+                              100
+                            )}%`,
+                          }}
+                        ></div>
+                      </div>
+                      <span className="text-xs font-medium text-white">
+                        {Math.min(Math.round((item.value / 1000) * 100), 100)}%
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
       </div>
 
-      <div className="px-4 grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
+      <div className=" grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10 h-140 overflow-hidden">
         {/* Enhanced Top Performing Ads with Infinite Vertical Scroll */}
         <div className="space-y-6">
           <div className="flex items-center space-x-3 mb-6">
-            <div className="p-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg">
+            <div className="p-2 bg-gradient-to-r from-green-700 to-green-500 rounded-lg">
               <StarIcon className="w-6 h-6 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800">
+            <h2 className="text-2xl font-bold text-green-800 solid">
               Shartnoma qiymati eng yuqori top 5ta tashkilot
             </h2>
           </div>
 
-          <div className="relative h-96 overflow-hidden bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-lg">
+          <div className="relative  overflow-hidden">
             <div className="animate-scroll-vertical space-y-4 p-4">
               {/* First set of ads */}
               {StatistikData?.top_5_ads?.map((items, index) => {
@@ -367,10 +364,10 @@ const Dashboard = () => {
         {/* Enhanced Photo Carousel */}
         <div className="space-y-6">
           <div className="flex items-center space-x-3 mb-6">
-            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+            <div className="p-2 bg-gradient-to-r from-green-500 to-green-800 rounded-lg">
               <PlayCircleIcon className="w-6 h-6 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800">
+            <h2 className="text-2xl font-bold text-green-800 solid">
               Top Reklamalar
             </h2>
           </div>
@@ -379,18 +376,14 @@ const Dashboard = () => {
             <div className="aspect-video relative overflow-hidden">
               {statistikPhotosData && statistikPhotosData[currentSlide] && (
                 <img
-                  src={
-                    statistikPhotosData[currentSlide].photo ||
-                    "/placeholder.svg" ||
-                    "/placeholder.svg"
-                  }
+                  src={statistikPhotosData[currentSlide].photo}
                   alt={statistikPhotosData[currentSlide].name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
               <div className="absolute bottom-6 left-6 right-6">
-                <h3 className="text-3xl font-bold text-white mb-2 animate-fade-in">
+                <h3 className="text-3xl font-bold text-white mb-2 animate-fade-in solid">
                   {statistikPhotosData &&
                     statistikPhotosData[currentSlide]?.name}
                 </h3>
@@ -435,12 +428,12 @@ const Dashboard = () => {
           <div className="p-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg">
             <MapPinIcon className="w-6 h-6 text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800">
+          <h2 className="text-2xl font-bold text-green-800 solid">
             Metropolitenda eng ko'p reklamaga ega top 10ta bekatlar
           </h2>
         </div>
 
-        <div className="relative overflow-hidden bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-lg p-6">
+        <div className="relative overflow-hidden ">
           <div
             className="animate-scroll-horizontal flex space-x-6"
             style={{ width: "max-content" }}
@@ -448,13 +441,11 @@ const Dashboard = () => {
             {/* First set of stations */}
             {StatistikData?.top_5_stations?.map((items, index) => (
               <div
-                key={`first-${items.id}`}
+                key={index}
                 className="group relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden flex-shrink-0 w-80"
               >
-                {/* Animated background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-teal-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                {/* Geometric shapes */}
                 <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-400/10 to-teal-500/10 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-500"></div>
                 <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-blue-400/10 to-indigo-500/10 rounded-full translate-y-8 -translate-x-8 group-hover:scale-125 transition-transform duration-500"></div>
 
@@ -483,7 +474,7 @@ const Dashboard = () => {
                   <div className="mt-4 space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-600 font-medium">
-                        Performance
+                        Ko'rsatkich
                       </span>
                       <span className="text-emerald-600 font-bold">
                         {Math.min(items.total * 10, 100)}%
@@ -501,9 +492,9 @@ const Dashboard = () => {
             ))}
 
             {/* Duplicate set for seamless loop */}
-            {StatistikData?.top_5_stations?.map((items) => (
+            {StatistikData?.top_5_stations?.map((items, index) => (
               <div
-                key={`second-${items.id}`}
+                key={index}
                 className="group relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden flex-shrink-0 w-80"
               >
                 {/* Animated background */}
@@ -538,7 +529,7 @@ const Dashboard = () => {
                   <div className="mt-4 space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-600 font-medium">
-                        Performance
+                        Ko'rsatkich
                       </span>
                       <span className="text-emerald-600 font-bold">
                         {Math.min(items.total * 10, 100)}%

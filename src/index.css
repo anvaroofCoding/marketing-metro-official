@@ -442,3 +442,41 @@
 .ant-spin .ant-spin-dot-item {
   background-color: #1a661e !important; /* sen xohlagan rang */
 }
+
+/* Modal OK button */
+.ant-modal-footer .ant-btn-primary {
+  border-color: #155d27;
+  color: #fff;
+  background-color: #155d27;
+}
+
+.ant-modal-footer .ant-btn-primary:hover,
+.ant-modal-footer .ant-btn-primary:focus {
+  background-color: #155d27 !important; /* hover yashil */
+  border-color: #155d27 !important;
+  color: #fff !important;
+}
+
+/* Modal Cancel button */
+.ant-modal-footer .ant-btn-default {
+  border-color: #155d27 !important;
+  color: #155d27 !important;
+  background-color: #fff;
+}
+
+.ant-modal-footer .ant-btn-default:hover {
+  background-color: #e6f0e6 !important; /* yengil yashil */
+  color: #155d27 !important;
+}
+
+/* Modal Input */
+.ant-modal-content .ant-input {
+  border-color: #d9d9d9; /* default gray */
+  transition: all 0.2s;
+}
+
+.ant-modal-content .ant-input:hover,
+.ant-modal-content .ant-input:focus {
+  border-color: #155d27 !important; /* hover yashil */
+  box-shadow: 0 0 0 2px rgba(21, 93, 39, 0.2) !important;
+}

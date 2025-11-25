@@ -36,7 +36,6 @@ export default function BannerPost() {
 
   return (
     <div>
-      <Toaster position="bottom-center" richColors />
       <Modal
         centered
         title="Banner nomini qo'shish"

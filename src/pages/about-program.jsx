@@ -47,7 +47,6 @@ export default function AboutProgram() {
         "Dasturning funksionalligi, bazaviy ma'lumotlarning sinxron ishlashi logikasi va Backend texnologiyalari || Ma'lumotlar bazasi ||APIlar boshqaruvi",
     },
   ];
-
   const appPages = [
     {
       title: "Dashboard  ",
@@ -153,17 +152,15 @@ export default function AboutProgram() {
       ],
     },
   ];
-
   return (
     <div className="min-h-screen ">
-      {/* Hero Section with National Elements */}
-      <div className="relative bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 rounded-3xl border border-slate-200/20 p-12 mb-12 mx-4 mt-4 overflow-hidden">
+      <div className="relative bg-gradient-to-r from-green-800 via-green-800 to-green-800 rounded-3xl border border-green-200/20 p-12 mb-12 mt-4 overflow-hidden">
         <div
           className="absolute inset-0 
              bg-[url('/naqshtitle.png')] 
              bg-repeat 
              bg-center 
-             bg-[length:400px_400px] 
+             bg-[length:600px_600px] 
              opacity-20 
              pointer-events-none
              z-0"
@@ -171,7 +168,7 @@ export default function AboutProgram() {
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-indigo-600/10"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/10 to-blue-300/20 rounded-full blur-3xl"></div>
 
-        <div className="relative z-10 text-center">
+        <div className="relative z-10 text-center solid">
           <div className="inline-flex items-center gap-3 mb-6">
             <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
               <Code className="w-8 h-8 text-white" />
@@ -180,7 +177,7 @@ export default function AboutProgram() {
               Marketing.tm1.uz dasturi haqida
             </h1>
           </div>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-green-100 max-w-3xl mx-auto leading-relaxed">
             Ushbu dastur Toshkent metropolitenining barcha bekatlari va
             obyektlaridagi reklama materiallari to‘g‘risidagi ma’lumotlar bazasi
             sifatida qo‘llaniladi.
@@ -189,11 +186,11 @@ export default function AboutProgram() {
       </div>
 
       {/* Development Team Section - Apple Style */}
-      <div className=" mx-auto px-6">
+      <div className=" mx-auto">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-3 mb-4">
-            <Users className="w-8 h-8 text-blue-600" />
-            <h2 className="text-4xl font-bold text-gray-900">
+            <Users className="w-8 h-8 text-green-800" />
+            <h2 className="text-4xl font-bold text-green-800 solid">
               Dastur yaratuvchilari
             </h2>
           </div>
@@ -208,16 +205,18 @@ export default function AboutProgram() {
                     <img
                       src={dev.avatar || "/placeholder.svg"}
                       alt={dev.name}
-                      className="w-25 h-30 rounded-full mx-auto border-4 border-blue-100 group-hover:border-blue-300 transition-colors"
+                      className="w-25 h-30 rounded-full mx-auto border-4  group-hover:border-green-700 transition-colors"
                     />
-                    <div className="absolute -bottom-2 -right-2 bg-blue-600 rounded-full p-2">
+                    <div className="absolute -bottom-2 -right-2 bg-green-600 rounded-full p-2">
                       <Award className="w-4 h-4 text-white" />
                     </div>
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
                     {dev.name}
                   </h3>
-                  <p className="text-blue-600 font-medium mb-3">{dev.role}</p>
+                  <p className="text-green-800 solid font-medium mb-3 ">
+                    {dev.role}
+                  </p>
                   <p className="text-gray-600 text-[11px] leading-relaxed">
                     {dev.contribution}
                   </p>
@@ -230,8 +229,8 @@ export default function AboutProgram() {
 
       <div className="py-20">
         <div className="pb-10 text-center flex justify-center items-center gap-3">
-          <Code2 className="w-8 h-8 text-blue-600" />
-          <h2 className="text-4xl font-bold text-gray-900">
+          <Code2 className="w-8 h-8 text-green-800" />
+          <h2 className="text-4xl font-bold solid text-green-800">
             Dasturni ishlab chiqishda quyidagi zamonaviy texnologiyalardan
             foydalanilgan.
           </h2>
@@ -243,12 +242,12 @@ export default function AboutProgram() {
       <div className="mx-auto px-6 mb-16">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-3 mb-4">
-            <Smartphone className="w-8 h-8 text-blue-600" />
-            <h2 className="text-4xl font-bold text-gray-900">
+            <Smartphone className="w-8 h-8 text-green-800 " />
+            <h2 className="text-4xl font-bold text-green-800 solid">
               Dastur funksionalligi haqida
             </h2>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto solid">
             Har bir sahifa o'ziga xos funksiyalarga va qulay interfeysga ega
           </p>
         </div>
@@ -273,10 +272,10 @@ export default function AboutProgram() {
 
               <div className="flex-1">
                 <div className="inline-flex items-center gap-3 mb-4">
-                  <div className="p-3 bg-blue-100 rounded-2xl">
-                    <page.icon className="w-6 h-6 text-blue-600" />
+                  <div className="p-3 bg-green-100 rounded-2xl">
+                    <page.icon className="w-6 h-6 text-green-600" />
                   </div>
-                  <h3 className="text-3xl font-bold text-gray-900">
+                  <h3 className="text-3xl font-bold text-green-800 solid">
                     {page.title}
                   </h3>
                 </div>
@@ -294,9 +293,9 @@ export default function AboutProgram() {
                     {page.features.map((feature, featureIndex) => (
                       <li
                         key={featureIndex}
-                        className="flex items-center gap-3 text-gray-600"
+                        className="flex items-center gap-3 text-gray-600 "
                       >
-                        <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
                         {feature}
                       </li>
                     ))}
@@ -311,22 +310,6 @@ export default function AboutProgram() {
       <div className="w-full flex justify-center py-10">
         <DowloandsButton />
       </div>
-
-      {/* Footer with National Pride */}
-      {/* <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-t-3xl mx-4 p-8">
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <Heart className="w-6 h-6 text-red-400" />
-            <p className="text-white text-lg">
-              O'zbekiston bilan faxrlanib yaratildi
-            </p>
-            <Heart className="w-6 h-6 text-red-400" />
-          </div>
-          <p className="text-blue-100">
-            Milliy qadriyatlar va zamonaviy texnologiyalarning uyg'unligi
-          </p>
-        </div>
-      </div> */}
     </div>
   );
 }

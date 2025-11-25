@@ -1,0 +1,67 @@
+/* Input va DatePicker */
+.green-input .ant-input,
+.green-input .ant-picker,
+.green-input .ant-picker-input > input {
+  /* default gray */
+  border-color: #d9d9d9 !important;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* Hover va focus holatlari */
+.green-input .ant-input:hover,
+.green-input .ant-input:focus,
+.green-input .ant-picker:hover,
+.green-input .ant-picker-focused {
+  border-color: #11a035 !important;
+  box-shadow: 0 0 0 2px rgba(17, 160, 53, 0.2) !important;
+}
+
+/* Selectlar default gray */
+.green-select .ant-select-selector {
+  border-color: #d9d9d9 !important;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* Select hover/focus yashil */
+.green-select .ant-select-selector:hover,
+.green-select .ant-select-selector:focus,
+.green-select .ant-select-selector:active {
+  border-color: #11a035 !important;
+  box-shadow: 0 0 0 2px rgba(17, 160, 53, 0.2) !important;
+}
+
+/* Dropdown ichidagi active itemlar */
+.green-select .ant-select-item-option-active,
+.green-select .ant-select-item-option-selected {
+  background-color: rgba(17, 160, 53, 0.1) !important;
+  color: #065f46 !important;
+}
+
+/* Upload hover yashil */
+.green-file-input .ant-upload:hover .ant-upload-select {
+  border-color: #11a035 !important;
+  box-shadow: 0 0 0 2px rgba(17, 160, 53, 0.2) !important;
+  background-color: rgba(17, 160, 53, 0.05) !important;
+}
+
+/* Buttons doim yashil */
+.green-btn {
+  background-color: #11a035 !important;
+  border-color: #11a035 !important;
+  color: #fff !important;
+}
+
+.green-btn:hover {
+  background-color: #0e8b2e !important;
+  border-color: #0e8b2e !important;
+}
+
+.green-cancel-btn {
+  border-color: #11a035 !important;
+  color: #11a035 !important;
+}
+
+.green-cancel-btn:hover {
+  background-color: #e6f0e6 !important;
+  color: #11a035 !important;
+}

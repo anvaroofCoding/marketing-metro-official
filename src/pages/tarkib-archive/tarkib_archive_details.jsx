@@ -1,33 +1,38 @@
-import { useGetTimeTugaganQuery } from "@/services/api";
+import { useGetArchiveTrainsDetailQuery } from "@/services/api";
 import { Image, Spin, Tag } from "antd";
 import { useParams } from "react-router-dom";
 import { Phone, Building2, CalendarDays, FileText, MapPin } from "lucide-react";
-import General_Rek_Paid from "./generak_rek_paid";
-export default function Weekdaitail() {
-  const { ida } = useParams();
-  const { data, isLoading, error } = useGetTimeTugaganQuery(ida);
+import Train_Archive_Paid from "./tarkib_archive_paid";
+
+export default function Tarkib_archive_details() {
+  const { id } = useParams();
+  const { data, isLoading, error } = useGetArchiveTrainsDetailQuery({ id });
   if (isLoading)
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <Spin />
       </div>
     );
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) {
+    console.log(error);
+  }
   console.log(data);
   return (
     <div className="w-full ">
       <div className="relative w-full bg-gradient-to-r from-[#2c6e49] to-[#1f4d36] rounded-xl p-6 shadow-lg overflow-hidden">
+        {/* Background pattern */}
         <div
           className="absolute inset-0 bg-[url('/naqshtitle.png')] 
 		  bg-repeat opacity-10 pointer-events-none"
         />
+
         <div className="relative z-10">
           {/* Title */}
           <div className="flex items-center justify-between">
             <h1 className="text-green-50 text-3xl font-bold leading-snug mb-4 flex items-center gap-2">
               <MapPin size={26} />
-              {data?.station} bekatidagi {data?.position_number}-joyda turgan
-              reklama
+              {data?.tarkib_nomi} harakat tarkib {data?.position_number}
+              -joylashgan reklama arxivi
             </h1>
           </div>
 
@@ -84,7 +89,7 @@ export default function Weekdaitail() {
           </div>
         </div>
       </div>
-      <General_Rek_Paid data={data} />
+      <Train_Archive_Paid data={data} />
     </div>
   );
 }

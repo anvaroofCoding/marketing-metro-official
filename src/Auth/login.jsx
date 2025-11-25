@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { message, notification } from "antd";
 import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from "sonner";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -94,14 +94,8 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    notification.config({
-      placement: "top",
-      duration: 3,
-      className: "custom-notification",
-    });
-
     try {
-      const response = await fetch("http://88.88.150.151:8090/api/token/", {
+      const response = await fetch("http://88.88.150.151:9000/api/token/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,10 +114,7 @@ export default function Login() {
         }
         navigate("/");
       } else {
-        notification.error({
-          message: "Login yoki parolingiz xato!",
-          description: "Iltimos qaytadan kiriting!",
-        });
+        toast.error("Login yoki parol xato. Iltimos qaytadan urinib ko'ring");
       }
     } catch (error) {
       console.error("Network error:", error);
@@ -139,7 +130,6 @@ export default function Login() {
         ref={particlesRef}
         className="absolute inset-0 z-0"
       />
-
       <Card className="w-full max-w-md relative z-10 backdrop-blur-xl bg-white/10 border-white/20 shadow-2xl animate-fade-in-up">
         <CardHeader className="space-y-1 text-center pb-8">
           <div className="mx-auto w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4 animate-scale-in backdrop-blur-sm">

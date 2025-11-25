@@ -7,24 +7,19 @@ import { Button, Input, notification, Space, Spin, Table, Tooltip } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetTimeQuery, useGetTugaganExcelQuery } from "../services/api";
-
+import { toast, Toaster } from "sonner";
 export default function Delay7() {
   const { Column, ColumnGroup } = Table;
   const navigate = useNavigate();
-
-  // pagination va search uchun state
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
   const [search, setSearch] = useState("");
   const { data: excelBlob, isFetching } = useGetTugaganExcelQuery();
-
-  // API dan malumot olish
   const {
     data,
     isLoading: Endloading,
     error: EndError,
   } = useGetTimeQuery({ page, limit, search });
-
   if (Endloading) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -33,14 +28,11 @@ export default function Delay7() {
     );
   }
   if (EndError) {
-    notification.error({ message: "Ma'lumotlarni yuklashda xatolik" });
+    toast.error("Ma'lumotlarni yuklashda xatolik");
   }
-
-  //   batafsil ko‘rish
-  function handleShow(id) {
-    navigate(`/kechikishlar/${id}`);
+  function handleShow(ida) {
+    navigate(`/kechikishlar/${ida}`);
   }
-
   function handleDownloads() {
     if (!excelBlob) return;
     const url = window.URL.createObjectURL(excelBlob);
@@ -51,12 +43,11 @@ export default function Delay7() {
     link.click();
     link.remove();
     window.URL.revokeObjectURL(url);
-    notification.success({ message: "Excel muvaffaqiyatli ko'chirildi" });
+    toast.success("Excel muvaffaqiyatli ko'chirildi");
   }
 
   return (
     <div className="w-full h-full flex flex-col">
-      {/* Search qismi */}
       <div className="h-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2 p-2">
         <Input
           placeholder="Qidirish..."
@@ -66,7 +57,8 @@ export default function Delay7() {
           className="w-full sm:w-[250px]"
         />
         <Button
-          type="primary"
+          variant="solid"
+          color="green"
           icon={<FileExcelOutlined />}
           onClick={handleDownloads}
           loading={isFetching}
@@ -77,7 +69,6 @@ export default function Delay7() {
         </Button>
       </div>
 
-      {/* Jadval qismi */}
       <div className="flex-1 w-full overflow-x-auto">
         <Table
           dataSource={data?.results?.haftada_tugaydigan}
@@ -92,7 +83,11 @@ export default function Delay7() {
         >
           <ColumnGroup>
             <Column title="ID" dataIndex="id" key="id" responsive={["sm"]} />
-            <Column title="Ijarachi" dataIndex="Ijarachi" key="Ijarachi" />
+            <Column
+              title="Ijarachi"
+              dataIndex="ijarachi_name"
+              key="ijarachi_name"
+            />
             <Column
               title="Reklama nomi"
               dataIndex="Reklama_nomi"
@@ -120,25 +115,11 @@ export default function Delay7() {
             />
             <Column
               title="Telefon raqami"
-              dataIndex="contact_number"
-              key="contact_number"
+              dataIndex="ijarachi_contact"
+              key="ijarachi_contact"
               responsive={["md"]}
             />
-            <Column
-              title="Saqlandi"
-              dataIndex="created_at"
-              key="created_at"
-              render={(created_at) => {
-                const now = new Date();
-                const givenDate = new Date(created_at);
-                const diffDays = Math.floor(
-                  (now - givenDate) / (1000 * 60 * 60 * 24)
-                );
-                if (diffDays === 0) return "Bugun";
-                if (diffDays === 1) return "Kecha";
-                return `${diffDays} kun oldin`;
-              }}
-            />
+            <Column title="Saqlandi" dataIndex="created_at" key="created_at" />
             <Column
               title="Tasdiqlovchi"
               dataIndex="created_by"
@@ -152,7 +133,8 @@ export default function Delay7() {
                 <Space size="middle">
                   <Tooltip title="Batafsil ko'rish">
                     <Button
-                      type="primary"
+                      color="green"
+                      variant="solid"
                       size="small"
                       onClick={() => handleShow(record.id)}
                     >

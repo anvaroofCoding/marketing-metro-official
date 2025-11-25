@@ -3,6 +3,7 @@ import Sidebar from "./components/sidebar";
 import { useGetAuthQuery } from "./services/api";
 import { message } from "antd";
 import { useEffect } from "react";
+import { Toaster } from "sonner";
 
 const App = () => {
   const location = useLocation();
@@ -52,8 +53,9 @@ const App = () => {
   if (!tokens) {
     navigate("/login");
   }
-  return (
+  return (  
     <div className="flex roboto ">
+      <Toaster richColors position="bottom-right" />
       <Sidebar />
 
       <div

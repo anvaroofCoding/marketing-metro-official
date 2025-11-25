@@ -152,7 +152,7 @@ export default function Sidebar() {
       icon: <TextSearch size={20} />,
       label: (
         <div className="flex justify-between items-center w-full">
-          <span>Ro'yhatga olish</span>
+          <span>Ro'yxatga olish</span>
         </div>
       ),
       children: [
@@ -173,6 +173,15 @@ export default function Sidebar() {
           ),
         },
       ],
+    },
+    {
+      key: "/train",
+      icon: <TextSearch size={20} />,
+      label: (
+        <div className="flex justify-between items-center w-full">
+          <span>Poyezdlarni ro'yxatlash </span>
+        </div>
+      ),
     },
     {
       key: "/dastur-haqida",

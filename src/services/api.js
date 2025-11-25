@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: "http://88.88.150.151:8090/api",
+  baseUrl: "http://88.88.150.151:9000/api/",
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("token_marketing");
@@ -8,11 +8,11 @@ const rawBaseQuery = fetchBaseQuery({
     return headers;
   },
 });
-const baseQuery = async (args, api, extra) => {
-  const result = await rawBaseQuery(args, api, extra);
-  if (result.error?.status === 401 || result.error?.status === 403) {
-    // localStorage.removeItem("token_marketing");
-    window.location.href = "/error-403";
+const baseQuery = async (args, api, extraOptions) => {
+  const result = await rawBaseQuery(args, api, extraOptions);
+  const status = result?.error?.status;
+  if (status === 401 || status === 403) {
+    window.location.replace("/error-403");
   }
   return result;
 };
@@ -23,6 +23,7 @@ export const api = createApi({
   endpoints: (builder) => ({
     getStation: builder.query({
       query: (id) => `/stations/${id}/`,
+      providesTags: ["Positions"],
     }),
     getPositionsByStation: builder.query({
       query: ({ stationId, page = 1, limit = 10, search = "" }) => {
@@ -67,21 +68,22 @@ export const api = createApi({
         body: formData,
         // MUHIM: headers ni qo'ymang, fetch avtomatik Content-Type ni o'rnatadi
       }),
-      invalidatesTags: ["Advertisements"],
+      invalidatesTags: ["Positions"],
     }),
     updateAdvent: builder.mutation({
-      query: ({ id, formData }) => ({
+      query: ({ id, data }) => ({
         url: `/advertisements/${id}/`,
-        method: "PUT", // yoki PATCH
-        body: formData,
+        method: "PUT",
+        body: data,
       }),
-      invalidatesTags: ["Advertisements"], // queryni refetch qiladi
+      invalidatesTags: ["Positions"], // queryni refetch qiladi
     }),
     deleteAdvent: builder.mutation({
       query: (id) => ({
         url: `/advertisements/${id}/`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Positions"],
     }),
     postPdf: builder.mutation({
       query: ({ id, file }) => {
@@ -102,8 +104,8 @@ export const api = createApi({
       }),
     }),
     getShowArchive: builder.query({
-      query: (ida) => ({
-        url: `/advertisements-archive/${ida}/`,
+      query: (arxiver) => ({
+        url: `/advertisements-archive/${arxiver}/`,
       }),
     }),
     getArchiveExcel: builder.query({
@@ -272,14 +274,14 @@ export const api = createApi({
       query: () => ({
         url: `/ijarachilar/`,
       }),
-      providesTags: ["tashkilod"],
+      providesTags: ["Positions"],
     }),
     getBanner: builder.query({
       query: ({ page, search, limit }) => ({
         url: `/turi/`,
         params: { page, search, limit },
       }),
-      providesTags: ["tashkilod"],
+      providesTags: ["Positions"],
     }),
     addBanner: builder.mutation({
       query: (formData) => ({
@@ -287,7 +289,7 @@ export const api = createApi({
         method: "POST",
         body: formData,
       }),
-      invalidatesTags: ["tashkilod"],
+      invalidatesTags: ["Positions"],
     }),
     updateBanner: builder.mutation({
       query: ({ id, formData }) => ({
@@ -295,17 +297,260 @@ export const api = createApi({
         method: "PUT",
         body: formData,
       }),
-      invalidatesTags: ["tashkilod"],
+      invalidatesTags: ["Positions"],
     }),
     getReklama: builder.query({
       query: (id) => ({
         url: `/positions/${id}`,
       }),
-      providesTags: ["tashkilod"],
+      providesTags: ["Positions"],
+    }),
+    getBannerForInput: builder.query({
+      query: () => ({
+        url: `/turi/`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    getTashkilodByinput: builder.query({
+      query: () => ({
+        url: `/ijarachilar/`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    addSum: builder.mutation({
+      query: (formData) => ({
+        url: `/shartnoma-summalari/`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    getAllAdvertimest: builder.query({
+      query: () => ({
+        url: `/advertisements/statistics-viewset/all`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    getDepo: builder.query({
+      query: () => ({
+        url: `/depo/`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    addDepo: builder.mutation({
+      query: (formData) => ({
+        url: `/depo/`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    updateDepo: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/depo/${id}/`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    getTarkib: builder.query({
+      query: ({ search, page, limit }) => ({
+        url: `/tarkib/`,
+        params: { search, page, limit },
+      }),
+      providesTags: ["Positions"],
+    }),
+    addTarkib: builder.mutation({
+      query: (formData) => ({
+        url: `/tarkib/`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    updateTarkib: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/tarkib/${id}/`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    getTarkibPosition: builder.query({
+      query: () => ({
+        url: `/tarkib-position/`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    addTarkibPosition: builder.mutation({
+      query: (formData) => ({
+        url: `/tarkib-position/`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    updateTarkibPosition: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/tarkib-position/${id}/`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    getTarkibSelect: builder.query({
+      query: () => ({
+        url: `/tarkib/`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    getTarkibDetails: builder.query({
+      query: (id) => ({
+        url: `/tarkib/${id}`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    createTrainPositionAdv: builder.mutation({
+      query: (formData) => ({
+        url: "/tarkib-advertisement/",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    getTarkibAdvertimesDetails: builder.query({
+      query: (id) => ({
+        url: `/tarkib-position/${id}`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    addSumForTarkib: builder.mutation({
+      query: (formData) => ({
+        url: `/tarkib-shartnoma-summalari/`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    updateTrainAdvertimies: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/tarkib-advertisement/${id}/`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    deleteAdventTrain: builder.mutation({
+      query: (id) => ({
+        url: `/tarkib-advertisement/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    deleteAdventTrainPaid: builder.mutation({
+      query: (id) => ({
+        url: `/tarkib-shartnoma-summalari/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    deleteAdventBekatPaid: builder.mutation({
+      query: (id) => ({
+        url: `/shartnoma-summalari/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Positions"],
+    }),
+    getAllAdvTrain: builder.query({
+      query: ({
+        page,
+        search,
+        Ijarachi,
+        position,
+        position__harakat_tarkibi,
+        limit,
+      }) => ({
+        url: `/tarkib-advertisement/`,
+        params: {
+          page,
+          search,
+          Ijarachi,
+          position,
+          position__harakat_tarkibi,
+          limit,
+        },
+      }),
+      providesTags: ["Positions"],
+    }),
+    getIjarachiOption: builder.query({
+      query: () => ({
+        url: `/ijarachilar/`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    getPositionTrainOption: builder.query({
+      query: () => ({
+        url: `/tarkib-position/`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    getTarkibTrainOption: builder.query({
+      query: () => ({
+        url: `/tarkib/`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    getArchiveTrains: builder.query({
+      query: ({ page, search, Ijarachi, position, tarkib, limit }) => ({
+        url: `/tarkib-adv-archive/`,
+        params: {
+          page,
+          search,
+          Ijarachi,
+          position,
+          tarkib,
+          limit,
+        },
+      }),
+      providesTags: ["Positions"],
+    }),
+    getArchiveTrainsDetail: builder.query({
+      query: ({ id }) => ({
+        url: `/tarkib-adv-archive/${id}/`,
+      }),
+      providesTags: ["Positions"],
     }),
   }),
 });
 export const {
+  useGetArchiveTrainsDetailQuery,
+  useGetArchiveTrainsQuery,
+  useGetTarkibTrainOptionQuery,
+  useGetPositionTrainOptionQuery,
+  useGetIjarachiOptionQuery,
+  useGetAllAdvTrainQuery,
+  useDeleteAdventBekatPaidMutation,
+  useDeleteAdventTrainPaidMutation,
+  useDeleteAdventTrainMutation,
+  useUpdateTrainAdvertimiesMutation,
+  useAddSumForTarkibMutation,
+  useGetTarkibAdvertimesDetailsQuery,
+  useCreateTrainPositionAdvMutation,
+  useGetTarkibDetailsQuery,
+  useGetTarkibSelectQuery,
+  useGetTarkibPositionQuery,
+  useAddTarkibPositionMutation,
+  useUpdateTarkibPositionMutation,
+  useGetTarkibQuery,
+  useAddTarkibMutation,
+  useUpdateTarkibMutation,
+  useAddDepoMutation,
+  useUpdateDepoMutation,
+  useGetDepoQuery,
+  useGetAllAdvertimestQuery,
+  useAddSumMutation,
+  useGetTashkilodByinputQuery,
+  useGetBannerForInputQuery,
   useGetReklamaQuery,
   useUpdateBannerMutation,
   useAddBannerMutation,

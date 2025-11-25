@@ -4,7 +4,6 @@ import {
   EditOutlined,
   EyeFilled,
   EyeOutlined,
-  FileExcelOutlined,
   PlusOutlined,
   SearchOutlined,
   UploadOutlined,
@@ -25,16 +24,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   useCreatePositionMutation,
   useDeletePositionMutation,
-  useGetArchiveExcelQuery,
   useGetPositionsByStationQuery,
   useGetStationQuery,
   usePostPdfMutation,
   useUpdatePositionMutation,
 } from "../services/api";
 import { toast, Toaster } from "sonner";
-
 const { Column, ColumnGroup } = Table;
-
 export default function StationDetail() {
   const [value, setValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,18 +64,12 @@ export default function StationDetail() {
   const [updatePosition, { isLoading: updateLoading }] =
     useUpdatePositionMutation();
   const [postPdf] = usePostPdfMutation();
-  const { data: excelBlob, isFetching } = useGetArchiveExcelQuery();
-
   if (createError) {
     toast.warning("Bunday positsiya mavjud, boshqa raqam qo'ying");
   }
-
   if (stationError || positionsError) {
     toast.error("Sahifani yangilang");
   }
-
-  console.log(positions);
-
   const handleDelete = async (ids) => {
     try {
       await deletePosition(ids).unwrap();
@@ -91,7 +81,6 @@ export default function StationDetail() {
       toast.error("O'chirishda xatolik yuz berdi!");
     }
   };
-
   const handleOk = async () => {
     try {
       await createPosition({ station_id: id, number: inputValue }).unwrap();
@@ -102,7 +91,6 @@ export default function StationDetail() {
       toast.error(err.toString());
     }
   };
-
   const handleUpdate = async () => {
     try {
       await updatePosition({ id: editingId, number: inputValue }).unwrap();
@@ -112,7 +100,6 @@ export default function StationDetail() {
       toast.error("Tahrirlashda xatolik yuz berdi!");
     }
   };
-
   const handleChange = async (info) => {
     const file = info.file;
     if (!file) return;
@@ -124,56 +111,11 @@ export default function StationDetail() {
       toast.error("PDF yangilashda xatolik yuz berdi!");
     }
   };
-
-  const handleDownload = () => {
-    if (!excelBlob) return;
-    const url = window.URL.createObjectURL(excelBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "reklamalar.xlsx");
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
-    toast.success("Excel muvaffaqiyatli ko'chirildi");
-  };
-
-  const renderTableSkeleton = () => {
-    return (
-      <>
-        {Array.from({ length: 5 }).map((_, i) => (
-          <tr key={i}>
-            <td>
-              <Skeleton.Input size="small" active />
-            </td>
-            <td>
-              <Skeleton.Input size="small" active />
-            </td>
-            <td>
-              <Skeleton.Input size="small" active />
-            </td>
-            <td>
-              <Skeleton.Input size="small" active />
-            </td>
-            <td>
-              <Skeleton.Input size="small" active />
-            </td>
-            <td>
-              <Skeleton.Input size="small" active />
-            </td>
-            <td>
-              <Skeleton.Input size="small" active />
-            </td>
-          </tr>
-        ))}
-      </>
-    );
-  };
-
   if (stationLoading) {
     return (
       <div className="w-full h-full p-2 flex flex-col gap-3">
         <Skeleton active paragraph={{ rows: 1 }} />
+        <Skeleton active paragraph={{ rows: 8 }} />
         <Skeleton active paragraph={{ rows: 8 }} />
       </div>
     );
@@ -181,15 +123,10 @@ export default function StationDetail() {
 
   return (
     <div className="w-full h-full p-2 flex flex-col gap-3">
-      <Toaster position="bottom-center" richColors />
-
-      {/* Header Section */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <h2 className="font-[800] text-2xl lg:text-3xl text-green-600 solid">
           {station?.name} bekati reklama joylari
         </h2>
-
-        {/* Action Buttons */}
         <div className="flex flex-wrap gap-2 items-center">
           <Link to={station?.schema_image} target="_blank">
             <Button
@@ -216,17 +153,6 @@ export default function StationDetail() {
               PDF yangilash
             </Button>
           </Upload>
-          {/* <Button
-            variant="solid"
-            color="green"
-            icon={<FileExcelOutlined />}
-            onClick={handleDownload}
-            loading={isFetching}
-            // disabled={!excelBlob}
-            size="middle"
-          >
-            Excel
-          </Button> */}
         </div>
       </div>
 
@@ -431,7 +357,6 @@ export default function StationDetail() {
         )}
       </div>
 
-      {/* Modals */}
       <Modal
         title="Yangi Position qo'shish"
         open={isModalOpen}
@@ -440,6 +365,7 @@ export default function StationDetail() {
         confirmLoading={createLoading}
         okText={createLoading ? "Qo'shilmoqda..." : "Qo'shish"}
         cancelText="Bekor qilish"
+        centered
       >
         <Input
           value={inputValue}
@@ -457,6 +383,7 @@ export default function StationDetail() {
         confirmLoading={updateLoading}
         okText={createLoading ? "Tahrirlanmoqda..." : "Tahrirlash"}
         cancelText="Bekor qilish"
+        centered
       >
         <Input
           placeholder="Number kiriting"

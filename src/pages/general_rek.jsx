@@ -11,24 +11,21 @@ import {
   useGetSearchExcelQuery,
   useGetSearchsQuery,
 } from "../services/api";
-
+import { toast, Toaster } from "sonner";
 export default function Allsearch() {
   const { Column, ColumnGroup } = Table;
   const navigate = useNavigate();
-
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
   const [search, setSearch] = useState("");
   const { data: excelBlob, isFetching } = useGetSearchExcelQuery({ search });
   const { data: FilePdfFilled, isFetching: isFetchingPdf } =
     useGetGeneralSearchQuery();
-
   const {
     data,
     isLoading: searchLoading,
     error: searchError,
   } = useGetSearchsQuery({ page, limit, search });
-
   if (searchLoading) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
@@ -37,13 +34,11 @@ export default function Allsearch() {
     );
   }
   if (searchError) {
-    notification.error({ message: "Ma'lumotlarni yuklashda xatolik" });
+    toast.error("Ma'lumotlarni yuklashda xatolik");
   }
-
   function handleShow(ida) {
     navigate(`/umumiy-qidiruv/${ida}/`);
   }
-
   function handleDownloads() {
     if (!excelBlob) return;
     const url = window.URL.createObjectURL(excelBlob);
@@ -54,7 +49,7 @@ export default function Allsearch() {
     link.click();
     link.remove();
     window.URL.revokeObjectURL(url);
-    notification.success({ message: "Excel muvaffaqiyatli ko'chirildi" });
+    toast.success("Excel muvaffaqiyatli ko'chirildi");
   }
   function handleDownloadsPdf() {
     if (!FilePdfFilled) return;
@@ -66,12 +61,10 @@ export default function Allsearch() {
     link.click();
     link.remove();
     window.URL.revokeObjectURL(url);
-    notification.success({ message: "PDf muvaffaqiyatli ko'chirildi" });
+    toast.success("PDf muvaffaqiyatli ko'chirildi");
   }
-
   return (
     <div className="w-full h-full flex flex-col">
-      {/* Search qismi */}
       <div className="h-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2 p-2">
         <Input
           placeholder="Qidirish..."
@@ -92,7 +85,8 @@ export default function Allsearch() {
           PDF ko'chirish
         </Button>
         <Button
-          type="primary"
+          variant="solid"
+          color="green"
           icon={<FileExcelOutlined />}
           onClick={handleDownloads}
           loading={isFetching}
@@ -102,8 +96,6 @@ export default function Allsearch() {
           Excel ko'chirish
         </Button>
       </div>
-
-      {/* Jadval qismi */}
       <div className="flex-1 w-full overflow-x-auto">
         <Table
           dataSource={data?.results}
@@ -122,8 +114,11 @@ export default function Allsearch() {
           }}
         >
           <ColumnGroup>
-            {/* <Column title="ID" dataIndex="id" key="id" responsive={["sm"]} /> */}
-            <Column title="Ijarachi" dataIndex="Ijarachi" key="Ijarachi" />
+            <Column
+              title="Ijarachi"
+              dataIndex="ijarachi_name"
+              key="ijarachi_name"
+            />
             <Column
               title="Reklama nomi"
               dataIndex="Reklama_nomi"
@@ -150,25 +145,11 @@ export default function Allsearch() {
             />
             <Column
               title="Telefon raqami"
-              dataIndex="contact_number"
-              key="contact_number"
+              dataIndex="ijarachi_contact"
+              key="ijarachi_contact"
               responsive={["md"]}
             />
-            <Column
-              title="Saqlandi"
-              dataIndex="created_at"
-              key="created_at"
-              render={(created_at) => {
-                const now = new Date();
-                const givenDate = new Date(created_at);
-                const diffDays = Math.floor(
-                  (now - givenDate) / (1000 * 60 * 60 * 24)
-                );
-                if (diffDays === 0) return "Bugun";
-                if (diffDays === 1) return "Kecha";
-                return `${diffDays} kun oldin`;
-              }}
-            />
+            <Column title="Saqlandi" dataIndex="created_at" key="created_at" />
             <Column
               title="Tasdiqlovchi"
               dataIndex="created_by"
@@ -182,7 +163,8 @@ export default function Allsearch() {
                 <Space size="middle">
                   <Tooltip title="Batafsil ko'rish">
                     <Button
-                      type="primary"
+                      variant="solid"
+                      color="green"
                       size="small"
                       onClick={() => handleShow(record.id)}
                     >

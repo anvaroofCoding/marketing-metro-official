@@ -4,7 +4,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Upload } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 export default function PostTashkilot() {
   const [file, setFile] = useState(null);
@@ -50,7 +50,6 @@ export default function PostTashkilot() {
 
   return (
     <div>
-      <Toaster position="bottom-center" richColors />
       <Modal
         centered
         title="Ijarachi qo'shish"
@@ -93,7 +92,7 @@ export default function PostTashkilot() {
               showUploadList={false}
               accept="image/*"
             >
-              <Button icon={<UploadOutlined />}>Logoni yuklash</Button>
+              <Button icon={<UploadOutlined />}> Logoni yuklash</Button>
             </Upload>
 
             {preview && (

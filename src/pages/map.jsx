@@ -1,7 +1,6 @@
 import { Spin } from "antd";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Added React Router for navigation
-
+import { useNavigate } from "react-router-dom";
 export default function Map() {
   const [selectedStation, setSelectedStation] = useState();
   const [scale, setScale] = useState(1);
@@ -12,13 +11,13 @@ export default function Map() {
   const [loading, setLoading] = useState(true);
   const svgRef = useRef(null);
   const containerRef = useRef(null);
-  const navigate = useNavigate(); // React Router navigation hook
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStations = async () => {
       try {
         const response = await fetch(
-          "http://88.88.150.151:8090/api/stations/",
+          "http://88.88.150.151:9000/api/stations/",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem(
@@ -30,17 +29,11 @@ export default function Map() {
         );
         const data = await response.json();
 
-        // if (Array.isArray(data)) {
-        //   setApiStations(data.results);
-        // } else {
-        //   console.error("[v0] API response is not an array:", data.results);
-        //   setApiStations([]); // Keep as empty array if response is not array
-        // }
         setApiStations(data.results);
         setLoading(false);
       } catch (error) {
-        console.error("[v0] Error fetching stations:", error);
-        setApiStations([]); // Ensure it's always an array even on error
+        console.error(error);
+        setApiStations([]);
         setLoading(false);
       }
     };
