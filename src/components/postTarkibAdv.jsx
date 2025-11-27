@@ -15,7 +15,7 @@ import {
   useGetBannerForInputQuery,
   useGetTashkilodByinputQuery,
 } from "@/services/api";
-import "./createAdvertisementss.css";
+import "./tem.css";
 import { useNavigate } from "react-router-dom";
 
 export default function PostTarkibAdv({ id, open, onClose }) {

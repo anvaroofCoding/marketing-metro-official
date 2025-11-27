@@ -15,7 +15,7 @@ import {
   useGetBannerForInputQuery,
   useGetTashkilodByinputQuery,
 } from "@/services/api";
-import "./createAdvertisementss.css";
+import "./tem.css";
 
 export default function CreateAdvertisements({ id }) {
   const [form] = Form.useForm();
