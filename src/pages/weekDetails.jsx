@@ -13,7 +13,6 @@ export default function Weekdaitail() {
       </div>
     );
   if (error) return <div>Error: {error.message}</div>;
-  console.log(data);
   return (
     <div className="w-full ">
       <div className="relative w-full bg-gradient-to-r from-[#2c6e49] to-[#1f4d36] rounded-xl p-6 shadow-lg overflow-hidden">

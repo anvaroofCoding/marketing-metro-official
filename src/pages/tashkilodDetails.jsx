@@ -1,6 +1,4 @@
 import {
-  EyeOutlined,
-  FileExcelOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import { Button, Input, notification, Space, Spin, Table, Tooltip } from "antd";
@@ -17,7 +15,6 @@ export default function TashkilodDetails() {
   const { Column, ColumnGroup } = Table;
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
 
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
@@ -41,7 +38,6 @@ export default function TashkilodDetails() {
     );
   }
 
-  console.log(getShowTAshkilod);
   if (archiveerror) {
     notification.error({ message: "Ma'lumotlarni yuklashda xatolik" });
   }

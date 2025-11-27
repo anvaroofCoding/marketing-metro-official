@@ -30,7 +30,6 @@ export default function PostTarkib() {
       setOpen(false);
       toast.success("Harakat tarkibi muvaffaqiyatli qo'shildi");
     } catch (error) {
-      console.log(error);
       if (error.data.schema_image) {
         toast.error(error.data.schema_image[0]);
       }

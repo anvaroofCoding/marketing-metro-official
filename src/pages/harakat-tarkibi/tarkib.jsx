@@ -53,7 +53,6 @@ export default function Tarkib() {
       toast.error(
         "Xatolik yuz berdi, iltimos qayta urinib ko'ring" + " " + err?.message
       );
-      console.log(err);
     }
   };
   const handleUpload = (fileObj) => {

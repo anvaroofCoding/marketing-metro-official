@@ -12,7 +12,6 @@ export default function EditTashkilod() {
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.modalEdit.isOpen);
   const [form] = Form.useForm();
-  console.log(isOpen);
 
   //   add ???????????
   const [addTashkilod, { isLoading, isError, error }] =

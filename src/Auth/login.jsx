@@ -130,6 +130,7 @@ export default function Login() {
         ref={particlesRef}
         className="absolute inset-0 z-0"
       />
+      <Toaster richColors position="bottom-right" closeButton />
       <Card className="w-full max-w-md relative z-10 backdrop-blur-xl bg-white/10 border-white/20 shadow-2xl animate-fade-in-up">
         <CardHeader className="space-y-1 text-center pb-8">
           <div className="mx-auto w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4 animate-scale-in backdrop-blur-sm">

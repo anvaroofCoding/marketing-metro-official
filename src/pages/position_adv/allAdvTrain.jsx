@@ -43,7 +43,6 @@ export default function AllAdvTrain() {
     position: selectedPosition,
     position__harakat_tarkibi: selectedTarkib,
   });
-  console.log(data);
 
   const { data: ijarachilar, isLoading: ijarachi_loads } =
     useGetIjarachiOptionQuery();

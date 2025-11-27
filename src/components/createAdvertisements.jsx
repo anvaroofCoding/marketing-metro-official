@@ -25,11 +25,9 @@ export default function CreateAdvertisements({ id }) {
   const { data: tashkilod, isLoading: tashkilodLoading } =
     useGetTashkilodByinputQuery();
 
-  const [createAdvent, { isLoading, isError, error }] =
-    useCreateAdventMutation();
+  const [createAdvent, { isLoading }] = useCreateAdventMutation();
 
   if (dataLoading || tashkilodLoading) return <Spin />;
-  if (isError) console.log(error);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);

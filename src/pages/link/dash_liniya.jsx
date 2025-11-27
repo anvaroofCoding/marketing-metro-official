@@ -1,9 +1,16 @@
-import { useGetAllAdvertimestQuery } from "@/services/api";
+import {
+  useGetAllAdvertimestQuery,
+  useGetPDFallReklamaMainQuery,
+} from "@/services/api";
+import { DownloadOutlined } from "@ant-design/icons";
 import { Card, Button, Spin, Typography } from "antd";
 import { Eye, Map } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 export default function DashLiniya() {
   const { data: GetAllAdvertimest, isLoading } = useGetAllAdvertimestQuery();
+  const { data: FilePdfFilled, isFetching: isFetchingPdf } =
+    useGetPDFallReklamaMainQuery();
   const navigate = useNavigate();
   if (isLoading) {
     return (
@@ -13,10 +20,21 @@ export default function DashLiniya() {
     );
   }
   const list = GetAllAdvertimest?.liniyalar ?? [];
-  console.log(GetAllAdvertimest);
+  function downloadPdf() {
+    if (!FilePdfFilled) return;
+    const url = window.URL.createObjectURL(FilePdfFilled);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "reklamalar-statistikasi.pdf");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    toast.success("PDf muvaffaqiyatli ko'chirildi!");
+  }
   return (
     <div>
-      <div className="relative bg-gradient-to-r from-green-800 via-green-800 to-green-800 rounded-3xl border border-slate-200/20 p-8 mb-8 overflow-hidden">
+      <div className="relative bg-gradient-to-r from-green-800 via-green-800 to-green-800 rounded-3xl border border-slate-200/20 p-8 mb-8 overflow-hidden flex justify-between items-center">
         <div
           className="absolute inset-0 
              bg-[url('/naqshtitle.png')] 
@@ -34,6 +52,15 @@ export default function DashLiniya() {
             Metropoliten Liniyalari
           </h1>
         </div>
+        <Button
+          variant="solid"
+          color="green"
+          icon={<DownloadOutlined />}
+          onClick={downloadPdf}
+          isLoading={isFetchingPdf}
+        >
+          PDF yuklab olish
+        </Button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {list.map((item) => {

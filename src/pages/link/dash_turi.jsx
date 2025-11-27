@@ -19,7 +19,6 @@ export default function Dash_turi() {
   const list_bekat = list?.bekatlar?.find((item) => {
     return bekat == item.bekat;
   });
-  console.log(list_bekat);
   return (
     <div>
       <div className="relative bg-gradient-to-r from-green-800 via-green-800 to-green-800 rounded-3xl border border-slate-200/20 p-8 mb-8 overflow-hidden">

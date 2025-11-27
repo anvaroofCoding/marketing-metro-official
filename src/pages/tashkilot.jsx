@@ -1,8 +1,5 @@
-"use client";
-
 import {
   CloudDownloadOutlined,
-  PlusCircleFilled,
   PlusOutlined,
   SearchOutlined,
   UploadOutlined,
@@ -14,14 +11,14 @@ import {
   useGetTashkilodQuery,
   useUpdateTashkilodMutation,
   useGetTashkilodExcelQuery,
-  useGetTashkilodPdfQuery,
+  useGetPDFDashIjarachiQuery,
+  useGetPDFDashMainQuery,
 } from "../services/api";
 import { Edit2, Eye } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { openModal } from "@/services/modalSplice";
 import PostTashkilot from "@/components/postTashkilot";
 import { toast } from "sonner";
-
 export default function Tashkilot() {
   const [editingId, setEditingId] = useState(null);
   const [updateTashkilod, { isLoading }] = useUpdateTashkilodMutation();
@@ -42,8 +39,7 @@ export default function Tashkilot() {
     }
   );
   const { data: excelBlob, isFetching } = useGetTashkilodExcelQuery();
-  const { data: pdfBlob, isFetching: isFetchingPdf } =
-    useGetTashkilodPdfQuery();
+
   const handleEditSubmit = async (values) => {
     const formData = new FormData();
     formData.append("name", values.name);
@@ -80,19 +76,32 @@ export default function Tashkilot() {
     setFile(fileObj);
     return false;
   };
+  const { data: FilePdfFilled, isFetching: isFetchingPdf } =
+    useGetPDFDashIjarachiQuery();
+  function downloadPdf() {
+    if (!FilePdfFilled) return;
+    const url = window.URL.createObjectURL(FilePdfFilled);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "ijarachilar.pdf");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    toast.success("PDf muvaffaqiyatli ko'chirildi!");
+  }
   useEffect(() => {
     return () => {
       if (preview) URL.revokeObjectURL(preview);
     };
   }, [preview]);
-  if (positionsLoading || isFetching || isFetchingPdf) {
+  if (positionsLoading || isFetching) {
     return (
       <div className="w-full h-screen flex justify-center items-center">
         <Spin size="large" />
       </div>
     );
   }
-  console.log(positions);
   return (
     <div className="w-full min-h-screen ">
       <div>
@@ -122,7 +131,7 @@ export default function Tashkilot() {
               Excel
             </Button>
             <Button
-              onClick={() => downloadFile(pdfBlob, "Tashkilotlar.pdf")}
+              onClick={downloadPdf}
               loading={isFetchingPdf}
               icon={<CloudDownloadOutlined />}
               size="middle"
@@ -241,7 +250,7 @@ export default function Tashkilot() {
           setFile(null);
           setPreview(null);
         }}
-        okText="Tahrirlashni saqlash"
+        okText={isLoading ? "Saqlanmoqda..." : "Saqlash"}
         cancelText="Bekor qilish"
       >
         <Form form={form} layout="vertical" onFinish={handleEditSubmit}>

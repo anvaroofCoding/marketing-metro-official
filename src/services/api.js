@@ -520,9 +520,63 @@ export const api = createApi({
       }),
       providesTags: ["Positions"],
     }),
+    getAllReklamaDepo: builder.query({
+      query: ({ type }) => ({
+        url: `/ijarachilar/unified-statistics/?type=${type}`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    getPDfIjarachiSum: builder.query({
+      query: () => ({
+        url: "/ijarachilar/sum-statistics/pdf/",
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          return blob;
+        },
+      }),
+    }),
+    getPDFDashMain: builder.query({
+      query: ({ type }) => ({
+        url: `/ijarachilar/unified-statistics/?type=${type}&pdf=true`,
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          return blob;
+        },
+      }),
+    }), // bu summalarniki
+    getPDFDashIjarachi: builder.query({
+      query: () => ({
+        url: "/ijarachi-tarkib-statistics/all-pdf/",
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          return blob;
+        },
+      }),
+    }),
+    gettAllPaid: builder.query({
+      query: () => ({
+        url: `/payments-history/`,
+      }),
+      providesTags: ["Positions"],
+    }),
+    getPDFallReklamaMain: builder.query({
+      query: () => ({
+        url: "/advertisements/statistics-viewset/all-pdf/",
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          return blob;
+        },
+      }),
+    }),
   }),
 });
 export const {
+  useGetPDFallReklamaMainQuery,
+  useGettAllPaidQuery,
+  useGetPDFDashIjarachiQuery,
+  useGetPDFDashMainQuery,
+  useGetPDfIjarachiSumQuery,
+  useGetAllReklamaDepoQuery,
   useGetArchiveTrainsDetailQuery,
   useGetArchiveTrainsQuery,
   useGetTarkibTrainOptionQuery,

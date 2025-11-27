@@ -29,14 +29,12 @@ export default function PostTarkibAdv({ id, open, onClose }) {
   const { data, isLoading: dataLoading } = useGetBannerForInputQuery();
   const { data: tashkilod, isLoading: tashkilodLoading } =
     useGetTashkilodByinputQuery();
-  const [createAdvent, { isLoading, isError, error }] =
+  const [createAdvent, { isLoading}] =
     useCreateTrainPositionAdvMutation();
   useEffect(() => {
     setIsModalOpen(open);
   }, [open]);
   if (dataLoading || tashkilodLoading) return <Spin />;
-  if (isError) console.log(error);
-  console.log(open);
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();

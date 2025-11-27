@@ -7,7 +7,6 @@ import General_Rek_Paid from "../generak_rek_paid";
 export default function Dash_All_Reklama() {
   const { ida } = useParams();
   const { data, isLoading, error } = useGetSearchsIdQuery(ida);
-  console.log(data);
   if (isLoading)
     return (
       <div className="w-full h-screen flex justify-center items-center">

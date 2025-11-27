@@ -112,17 +112,16 @@ const Dashboard = () => {
         return `/All/advertisement/liniya`;
 
       case "hamkor_tashkilot_soni":
-        return `/All/advertisement/partner`;
+        return `/tashkilotni-royxatga-olish`;
 
       case "reklamadan_tushadigan_umumiy_summa":
-        return `/All/advertisement/sum`;
+        return `/Umumiy-shartnoma-summalari`;
 
       default:
         return "/";
     }
   }
 
-  console.log(StatistikData);
   return (
     <div className="min-h-screen overflow-y-auto">
       <div className="relative bg-gradient-to-r from-green-800 via-green-800 to-green-800 rounded-3xl border border-slate-200/20 p-8 mb-8 overflow-hidden">

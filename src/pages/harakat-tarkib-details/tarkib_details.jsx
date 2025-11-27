@@ -41,7 +41,6 @@ export default function Tarkib_Details() {
     const formData = {
       position: values.position,
     };
-    console.log(formData, editingId);
     try {
       await updateTashkilod({ id: editingId, formData }).unwrap();
       toast.success("Ma'lumot muvaffaqiyatli tahrirlandi");
@@ -51,7 +50,6 @@ export default function Tarkib_Details() {
       toast.error(
         "Xatolik yuz berdi, iltimos qayta urinib ko'ring" + " " + err?.message
       );
-      console.log(err);
     }
   };
   if (positionsLoading || Tarkib_loading) {
@@ -78,7 +76,6 @@ export default function Tarkib_Details() {
 
     return positionMatch || ijarachiMatch;
   });
-  console.log(filteredPositions);
   const columns = [
     {
       title: "Nomer",

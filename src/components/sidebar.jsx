@@ -8,11 +8,13 @@ import {
 import { Modal, Spin } from "antd";
 import {
   Archive,
+  BanknoteArrowDown,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   Clock,
   Home,
+  List,
   LogOut,
   Map,
   Search,
@@ -81,6 +83,15 @@ export default function Sidebar() {
       label: (
         <div className="flex justify-between items-center w-full">
           <span>Xarita</span>
+        </div>
+      ),
+    },
+    {
+      key: "/All/Pay",
+      icon: <BanknoteArrowDown size={20} />,
+      label: (
+        <div className="flex justify-between items-center w-full">
+          <span>Barcha to'lovlar</span>
         </div>
       ),
     },
@@ -176,7 +187,7 @@ export default function Sidebar() {
     },
     {
       key: "/train",
-      icon: <TextSearch size={20} />,
+      icon: <List size={20} />,
       label: (
         <div className="flex justify-between items-center w-full">
           <span>Poyezdlarni ro'yxatlash </span>

@@ -36,7 +36,6 @@ export default function UpdateAdvertisementsTrains({
   };
   if (dataLoading || tashkilodLoading) return <></>;
   if (isError) {
-    console.log(error);
     if (error.data.Shartnoma_muddati_boshlanish) {
       toast.error(error.data.Shartnoma_muddati_boshlanish[0]);
     }
@@ -61,7 +60,6 @@ export default function UpdateAdvertisementsTrains({
     try {
       const values = await form.validateFields();
       const formData = new FormData();
-      console.log(values);
       formData.append("position", position_id);
       formData.append("Reklama_nomi", values.Reklama_nomi);
       formData.append("Qurilma_turi", values.Qurilma_turi);

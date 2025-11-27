@@ -50,8 +50,7 @@ export default function Position_adv_one({ data }) {
       await deleteAdv(id).unwrap();
       toast.success(`To'lov o‘chirildi ${id}`);
     } catch (e) {
-      toast.error("O‘chirishda xatolik");
-      console.log(e);
+      toast.error("O‘chirishda xatolik" + " " + e);
     }
   };
 

@@ -1,9 +1,8 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./components/sidebar";
 import { useGetAuthQuery } from "./services/api";
-import { message } from "antd";
 import { useEffect } from "react";
-import { Toaster } from "sonner";
+import { toast, Toaster } from "sonner";
 
 const App = () => {
   const location = useLocation();
@@ -18,11 +17,10 @@ const App = () => {
         !lastShown ||
         new Date(lastShown).toDateString() !== now.toDateString()
       ) {
-        message.success({
-          content: "Token tekshiruvi!",
-          duration: 5,
-          closable: true,
+        toast("Token tekshiruvi!", {
+          description: "Ishlamoqda...",
         });
+
         localStorage.setItem("token_check_success", now.toISOString());
       }
     }
@@ -32,11 +30,7 @@ const App = () => {
     // ✅ ERROR har 10 soniyada tekshiriladi
     if (error) {
       const interval = setInterval(() => {
-        message.error({
-          content: "Profilingizdan chiqib qayta kiring iltimos",
-          duration: 5,
-          closable: true,
-        });
+        toast.warning("Profilingizdan chiqib qayta kiring iltimos");
       }, 10000);
 
       return () => clearInterval(interval);
@@ -53,7 +47,7 @@ const App = () => {
   if (!tokens) {
     navigate("/login");
   }
-  return (  
+  return (
     <div className="flex roboto ">
       <Toaster richColors position="bottom-right" />
       <Sidebar />

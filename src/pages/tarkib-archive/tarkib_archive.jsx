@@ -35,7 +35,6 @@ export default function Tarkib_Archive() {
     position: selectedPosition,
     tarkib: selectedTarkib,
   });
-  console.log(data);
 
   const { data: ijarachilar, isLoading: ijarachi_loads } =
     useGetIjarachiOptionQuery();

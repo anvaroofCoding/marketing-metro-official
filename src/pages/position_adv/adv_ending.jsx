@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 export default function Ending_Adv_train({ ids }) {
   const [deleteAdv, { isLoading }] = useDeleteAdventTrainMutation();
   const [open, setOpen] = useState(false);
-  console.log(ids);
   const showConfirm = () => setOpen(true);
 
   const handleOk = async () => {

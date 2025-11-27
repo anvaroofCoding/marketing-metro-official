@@ -5,7 +5,6 @@ import { useAddSumForTarkibMutation } from "@/services/api";
 import { toast } from "sonner";
 
 export default function Train_adv_paid({ id }) {
-  console.log(id);
   const [open, setOpen] = useState(false);
   const [sum, setSum] = useState(0);
   const [comment, setComment] = useState("");

@@ -18,6 +18,8 @@ import Dash_Liniya from "@/pages/link/dash_liniya";
 import Dash_Reklama from "@/pages/link/dash_reklama";
 import Dash_turi from "@/pages/link/dash_turi";
 import Map from "@/pages/map";
+import AllPay from "@/pages/pay/AllPay";
+import AllReklamaDash from "@/pages/position_adv/allReklamaDash";
 import Position_adv from "@/pages/position_adv/positions_adv";
 import AdvertisementDetail from "@/pages/positions";
 import StationDetail from "@/pages/station";
@@ -102,6 +104,14 @@ export const router = createBrowserRouter([
       {
         path: "/train/archive/:id",
         element: <Tarkib_archive_details />,
+      },
+      {
+        path: "/Umumiy-shartnoma-summalari",
+        element: <AllReklamaDash />,
+      },
+      {
+        path: "/All/Pay",
+        element: <AllPay />,
       },
     ],
   },

@@ -3,6 +3,7 @@ import { Image, Spin, Tag } from "antd";
 import { useParams } from "react-router-dom";
 import { Phone, Building2, CalendarDays, FileText, MapPin } from "lucide-react";
 import Train_Archive_Paid from "./tarkib_archive_paid";
+import { toast } from "sonner";
 
 export default function Tarkib_archive_details() {
   const { id } = useParams();
@@ -14,9 +15,8 @@ export default function Tarkib_archive_details() {
       </div>
     );
   if (error) {
-    console.log(error);
+    toast.error(error);
   }
-  console.log(data);
   return (
     <div className="w-full ">
       <div className="relative w-full bg-gradient-to-r from-[#2c6e49] to-[#1f4d36] rounded-xl p-6 shadow-lg overflow-hidden">

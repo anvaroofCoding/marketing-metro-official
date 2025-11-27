@@ -50,9 +50,9 @@ export default function AboutProgram() {
   const appPages = [
     {
       title: "Dashboard  ",
-      description: "Bu sahifada marketining statistikasi yuritiladi",
+      description: "Sahifa dasturning statistikasini yuritadi",
       icon: LucideLayoutDashboard,
-      image: "/dashboard.png",
+      image: "/1.png",
       features: [
         "Shartnomalar sonini ko'rish",
         "Shartnomalarning umumiy summasi",
@@ -64,7 +64,7 @@ export default function AboutProgram() {
       description:
         "Bu sahifada Metropolitenning xaritasini batafsil ko'rib, bekatlarning oldidagi tugmalarni bosib ularning sahifalariga o'tish mumkin",
       icon: MapIcon,
-      image: "/map.png",
+      image: "/2.png",
       features: [
         "Tez va qulayligi",
         "Yaqin va uzoqlikka harakatlantirish",
@@ -76,7 +76,7 @@ export default function AboutProgram() {
       description:
         "Bu sahifa orqali bekatlardagi reklamalarini nazoratga olish mumkin",
       icon: Building,
-      image: "stations.png",
+      image: "3.png",
       features: [
         "Bekat chizmasini ko'ra olish va uni o'zgartirish",
         "Bekatlarga reklama joylarini qo'shish, ularni ko'rish va reklama joylarini holatlarini ham bilish",
@@ -88,7 +88,7 @@ export default function AboutProgram() {
       description:
         "Bu sahifa orqali har bir reklamalarning shartnomalari tuziladi",
       icon: Sparkles,
-      image: "/advertimes.png",
+      image: "/4.png",
       features: [
         "Reklama ma'lumotlar, shartnoma va reklamaning rasmlarini saqlash",
         "Reklama ma'lumotlarni tahrirlash",
@@ -99,7 +99,7 @@ export default function AboutProgram() {
       title: "Arxiv",
       description: "Bu sahifada barcha reklamalarning tarixi saqlanib qoladi",
       icon: Archive,
-      image: "/archive.png",
+      image: "/12.png",
       features: [
         "Excel va PDF ko'rinishida arxivni saqlash",
         "Barcha arvixdagi ma'lumotlarni qidirish",
@@ -110,7 +110,7 @@ export default function AboutProgram() {
       title: "Umumiy reklamalar",
       description: "Bu sahifada barcha reklamalarni ko'rishingiz mumkin",
       icon: SearchCheckIcon,
-      image: "/archive.png",
+      image: "/5.png",
       features: [
         "Excel va PDF ko'rinishida reklamalarni saqlash",
         "Kerakli bo'lgan reklamalarni qidiriuv ularni shunchaki Excel qilib saqlab olish",
@@ -122,7 +122,7 @@ export default function AboutProgram() {
       description:
         "Bu sahifada muddatiga 7 kun qolgan va muddati tugagan reklamalarni ko'rish uchun",
       icon: SearchCheckIcon,
-      image: "/deley.png",
+      image: "/6.png",
       features: [
         "Excel ko'rinishida reklamalarni saqlash",
         "Reklama muddati tugagan hamkorlar haqida ma'lumot olish",
@@ -131,9 +131,9 @@ export default function AboutProgram() {
     },
     {
       title: "Ijarachi tashkilotlar",
-      description: "bu sahifa orqali ijarachilarni ro'yxatlash",
+      description: "Bu sahifa orqali ijarachilarni ro'yxatlash",
       icon: LogIn,
-      image: "/tashkilod.png",
+      image: "/7.png",
       features: [
         "Icharachilarni qo'shish ko'rish ularni ma'lumotlarini o'zgartirish",
         "Icharachilarning har birini qanday shartnomalari bor ularni ko'rish",
@@ -141,10 +141,21 @@ export default function AboutProgram() {
       ],
     },
     {
+      title: "Banner ro'yxatga olish",
+      description: "Bu sahifa orqali qurilmalar va bannerlar ro'yxatga olinadi",
+      icon: LogIn,
+      image: "/8.png",
+      features: [
+        "Bannerlarni nomini qo'shish",
+        "qulayligi boshqa sahifada foydalangan payti shunchaki chaqirib olish",
+        "Bannerlarni nomini osongina qidirish imkoniyati",
+      ],
+    },
+    {
       title: "Kirish",
       description: "Bu sahifa dasturga kirish qismi",
       icon: LogIn,
-      image: "/login.png",
+      image: "/8.png",
       features: [
         "Judayam zamonaviy ko'rinish",
         "Dizayn olamining eng yorqin ranglari",
@@ -262,10 +273,10 @@ export default function AboutProgram() {
             >
               <div className="flex-1">
                 <div className="">
-                  <Image
+                  <img
                     src={page.image || "/placeholder.svg"}
                     alt={page.title}
-                    className="w-full h-64 object-cover rounded-2xl hover:rounded-2xl overflow-hidden"
+                    className="w-full object-cover rounded-2xl hover:rounded-2xl overflow-hidden"
                   />
                 </div>
               </div>

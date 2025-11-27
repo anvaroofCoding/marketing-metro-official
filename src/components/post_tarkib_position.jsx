@@ -29,7 +29,9 @@ export default function PostTarkibPosition({ id }) {
       if (error.data.position) {
         toast.error(error.data.position[0]);
       }
-      console.log(error);
+      if (error) {
+        toast("Afsuski bunday joy oldindan mavjud boshqa joy qo'shing!");
+      }
     }
   };
   return (
