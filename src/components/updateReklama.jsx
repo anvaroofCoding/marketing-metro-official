@@ -8,7 +8,7 @@ import {
   useGetBannerForInputQuery,
   useGetTashkilodByinputQuery,
 } from "@/services/api";
-import "./CreateAdvertisements.css";
+import "./createAdvertisementss.css";
 import { toast, Toaster } from "sonner";
 import { Pencil } from "lucide-react";
 import { Button } from "./ui/button";

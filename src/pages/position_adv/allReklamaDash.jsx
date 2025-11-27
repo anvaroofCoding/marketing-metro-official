@@ -6,6 +6,7 @@ import { Card, Spin, Select, Button } from "antd";
 import { useState } from "react";
 import { DownloadOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
+// import "../position_adv/dash.css";
 const { Meta } = Card;
 const AllReklamaDash = () => {
   const [type, setType] = useState("train");

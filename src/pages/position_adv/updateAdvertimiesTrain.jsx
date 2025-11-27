@@ -8,7 +8,7 @@ import {
   useGetTashkilodByinputQuery,
   useUpdateTrainAdvertimiesMutation,
 } from "@/services/api";
-import "../../components/createAdvertisements.css";
+import "@/components/createAdvertisementss.css";
 import { toast } from "sonner";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";

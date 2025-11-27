@@ -480,21 +480,3 @@
   border-color: #155d27 !important; /* hover yashil */
   box-shadow: 0 0 0 2px rgba(21, 93, 39, 0.2) !important;
 }
-
-.green-select .ant-select-selector {
-  background-color: #52c41a !important; /* Yashil */
-  border-color: #52c41a !important;
-  color: white !important;
-}
-
-.green-select .ant-select-arrow {
-  color: white !important;
-}
-
-.green-select .ant-select-selection-item {
-  color: white !important;
-}
-
-.green-select .ant-select-selection-placeholder {
-  color: #e5e5e5 !important;
-}

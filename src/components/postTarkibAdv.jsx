@@ -15,7 +15,7 @@ import {
   useGetBannerForInputQuery,
   useGetTashkilodByinputQuery,
 } from "@/services/api";
-import "./CreateAdvertisements.css";
+import "./createAdvertisementss.css";
 import { useNavigate } from "react-router-dom";
 
 export default function PostTarkibAdv({ id, open, onClose }) {
@@ -29,8 +29,7 @@ export default function PostTarkibAdv({ id, open, onClose }) {
   const { data, isLoading: dataLoading } = useGetBannerForInputQuery();
   const { data: tashkilod, isLoading: tashkilodLoading } =
     useGetTashkilodByinputQuery();
-  const [createAdvent, { isLoading}] =
-    useCreateTrainPositionAdvMutation();
+  const [createAdvent, { isLoading }] = useCreateTrainPositionAdvMutation();
   useEffect(() => {
     setIsModalOpen(open);
   }, [open]);
