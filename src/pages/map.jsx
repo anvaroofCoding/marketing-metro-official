@@ -16,23 +16,17 @@ export default function Map() {
   useEffect(() => {
     const fetchStations = async () => {
       try {
-        const response = await fetch(
-          "http://88.88.150.151:9000/api/stations/",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem(
-                "token_marketing"
-              )}`,
-            },
-            credentials: "include",
-          }
-        );
+        const response = await fetch("https://sunnat.tm1.uz/api/stations/", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token_marketing")}`,
+          },
+          credentials: "include",
+        });
         const data = await response.json();
 
         setApiStations(data.results);
         setLoading(false);
       } catch (error) {
-        console.error(error);
         setApiStations([]);
         setLoading(false);
       }
@@ -43,7 +37,6 @@ export default function Map() {
 
   const findApiStation = (stationName) => {
     if (!Array.isArray(apiStations)) {
-      console.error("[v0] apiStations is not an array:", apiStations);
       return null;
     }
 
@@ -51,27 +44,27 @@ export default function Map() {
       (station) =>
         station.name.toLowerCase() === stationName.toLowerCase() ||
         station.name.toLowerCase().includes(stationName.toLowerCase()) ||
-        stationName.toLowerCase().includes(station.name.toLowerCase())
+        stationName.toLowerCase().includes(station.name.toLowerCase()),
     );
   };
 
   // Station coordinates and data (removed the 7 moveable stations)
   const stations = {
     // Blue Line (Beruniy to Do'stlik) - #0100ee
-    beruniy: { x: 100, y: 45, name: "Beruniy", line: "blue" },
-    tinchlik: { x: 100, y: 130, name: "Tinchlik", line: "blue" },
-    chorsu: { x: 100, y: 200, name: "Chorsu", line: "blue" },
-    gafur_gulom: { x: 180, y: 280, name: "G'afur G'ulom", line: "blue" },
-    alisher_navoiy: {
+    "beruniy": { x: 100, y: 45, name: "Beruniy", line: "blue" },
+    "tinchlik": { x: 100, y: 130, name: "Tinchlik", line: "blue" },
+    "chorsu": { x: 100, y: 200, name: "Chorsu", line: "blue" },
+    "gafur_gulom": { x: 180, y: 280, name: "G'afur G'ulom", line: "blue" },
+    "alisher_navoiy": {
       x: 260,
       y: 360,
       name: "Alisher Navoiy",
       line: "blue",
       transfer: ["red"],
     },
-    ozbekiston: { x: 270, y: 470, name: "O'zbekiston", line: "blue" },
-    mashinasozlar: { x: 700, y: 605, name: "Mashinasozlar", line: "blue" },
-    dostlik: {
+    "ozbekiston": { x: 270, y: 470, name: "O'zbekiston", line: "blue" },
+    "mashinasozlar": { x: 700, y: 605, name: "Mashinasozlar", line: "blue" },
+    "dostlik": {
       x: 700,
       y: 640,
       name: "Do'stlik",
@@ -80,13 +73,18 @@ export default function Map() {
     },
 
     // Green Line (Turkistan to Ming Urik) - #007e02
-    turkiston: { x: 500, y: 50, name: "Turkiston", line: "green" },
-    yunusobod: { x: 500, y: 100, name: "Yunusobod", line: "green" },
-    shahriston: { x: 500, y: 150, name: "Shahriston", line: "green" },
-    bodomzor: { x: 500, y: 200, name: "Bodomzor", line: "green" },
-    minor: { x: 500, y: 250, name: "Minor", line: "green" },
-    abdulla_qodiriy: { x: 500, y: 300, name: "Abdulla Qodiriy", line: "green" },
-    yunus_rajabiy: {
+    "turkiston": { x: 500, y: 50, name: "Turkiston", line: "green" },
+    "yunusobod": { x: 500, y: 100, name: "Yunusobod", line: "green" },
+    "shahriston": { x: 500, y: 150, name: "Shahriston", line: "green" },
+    "bodomzor": { x: 500, y: 200, name: "Bodomzor", line: "green" },
+    "minor": { x: 500, y: 250, name: "Minor", line: "green" },
+    "abdulla_qodiriy": {
+      x: 500,
+      y: 300,
+      name: "Abdulla Qodiriy",
+      line: "green",
+    },
+    "yunus_rajabiy": {
       x: 500,
       y: 350,
       name: "Yunus Rajabiy",
@@ -102,19 +100,19 @@ export default function Map() {
     },
 
     // Red Line (Chinor to Buyuk Ipak Yuli) - #7c0803
-    buyuk_ipak: { x: 700, y: 180, name: "Buyuk Ipak Yo'li", line: "red" },
-    pushkin: { x: 700, y: 235, name: "Pushkin", line: "red" },
-    hamid_olimjon: { x: 700, y: 285, name: "Hamid Olimjon", line: "red" },
-    milliy_bog: { x: 150, y: 500, name: "Milliy Bog'", line: "red" },
-    novza: { x: 107, y: 550, name: "Novza", line: "red" },
-    mirzo_ulugbek: { x: 107, y: 590, name: "Mirzo Ulug'bek", line: "red" },
-    chilonzor: { x: 107, y: 630, name: "Chilonzor", line: "red" },
-    olmazor: { x: 107, y: 670, name: "Olmazor", line: "red" },
-    choshtepa: { x: 107, y: 710, name: "Choshtepa", line: "red" },
-    ozgarish: { x: 107, y: 750, name: "O'zgarish", line: "red" },
-    sergeli: { x: 107, y: 790, name: "Sergeli", line: "red" },
-    yangihayot: { x: 107, y: 830, name: "Yangihayot", line: "red" },
-    chinor: {
+    "buyuk_ipak": { x: 700, y: 180, name: "Buyuk Ipak Yo'li", line: "red" },
+    "pushkin": { x: 700, y: 235, name: "Pushkin", line: "red" },
+    "hamid_olimjon": { x: 700, y: 285, name: "Hamid Olimjon", line: "red" },
+    "milliy_bog": { x: 150, y: 500, name: "Milliy Bog'", line: "red" },
+    "novza": { x: 107, y: 550, name: "Novza", line: "red" },
+    "mirzo_ulugbek": { x: 107, y: 590, name: "Mirzo Ulug'bek", line: "red" },
+    "chilonzor": { x: 107, y: 630, name: "Chilonzor", line: "red" },
+    "olmazor": { x: 107, y: 670, name: "Olmazor", line: "red" },
+    "choshtepa": { x: 107, y: 710, name: "Choshtepa", line: "red" },
+    "ozgarish": { x: 107, y: 750, name: "O'zgarish", line: "red" },
+    "sergeli": { x: 107, y: 790, name: "Sergeli", line: "red" },
+    "yangihayot": { x: 107, y: 830, name: "Yangihayot", line: "red" },
+    "chinor": {
       x: 107,
       y: 870,
       name: "Chinor",
@@ -123,26 +121,26 @@ export default function Map() {
     },
 
     // Yellow Line (Technopark to Kipchak) - #f0e608
-    texnopark: {
+    "texnopark": {
       x: 700,
       y: 660,
       name: "Texnopark",
       line: "yellow",
       transfer: ["blue"],
     },
-    yashnobod: { x: 700, y: 700, name: "Yashnobod", line: "yellow" },
-    tuzel: { x: 700, y: 740, name: "Tuzel", line: "yellow" },
-    olmos: { x: 700, y: 780, name: "Olmos", line: "yellow" },
-    rohat: { x: 700, y: 820, name: "Rohat", line: "yellow" },
-    yangiobod: { x: 700, y: 860, name: "Yangiobod", line: "yellow" },
-    qoyliq: { x: 650, y: 910, name: "Qo'yliq", line: "yellow" },
-    malohat: { x: 590, y: 910, name: "Matonat", line: "yellow" },
-    qiyot: { x: 530, y: 910, name: "Qiyot", line: "yellow" },
-    tolariq: { x: 440, y: 910, name: "Tolariq", line: "yellow" },
-    xonobod: { x: 360, y: 910, name: "Xonobod", line: "yellow" },
-    quruvchilar: { x: 280, y: 910, name: "Quruvchilar", line: "yellow" },
-    turon: { x: 200, y: 910, name: "Turon", line: "yellow" },
-    qipchoq: {
+    "yashnobod": { x: 700, y: 700, name: "Yashnobod", line: "yellow" },
+    "tuzel": { x: 700, y: 740, name: "Tuzel", line: "yellow" },
+    "olmos": { x: 700, y: 780, name: "Olmos", line: "yellow" },
+    "rohat": { x: 700, y: 820, name: "Rohat", line: "yellow" },
+    "yangiobod": { x: 700, y: 860, name: "Yangiobod", line: "yellow" },
+    "qoyliq": { x: 650, y: 910, name: "Qo'yliq", line: "yellow" },
+    "malohat": { x: 590, y: 910, name: "Matonat", line: "yellow" },
+    "qiyot": { x: 530, y: 910, name: "Qiyot", line: "yellow" },
+    "tolariq": { x: 440, y: 910, name: "Tolariq", line: "yellow" },
+    "xonobod": { x: 360, y: 910, name: "Xonobod", line: "yellow" },
+    "quruvchilar": { x: 280, y: 910, name: "Quruvchilar", line: "yellow" },
+    "turon": { x: 200, y: 910, name: "Turon", line: "yellow" },
+    "qipchoq": {
       x: 107,
       y: 910,
       name: "Qipchoq",
@@ -246,7 +244,7 @@ export default function Map() {
     const touch2 = touches[1];
     return Math.sqrt(
       Math.pow(touch2.clientX - touch1.clientX, 2) +
-        Math.pow(touch2.clientY - touch1.clientY, 2)
+        Math.pow(touch2.clientY - touch1.clientY, 2),
     );
   };
 

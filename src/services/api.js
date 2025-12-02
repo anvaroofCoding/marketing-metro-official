@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: "http://88.88.150.151:9000/api/",
+  baseUrl: "https://sunnat.tm1.uz/api/",
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("token_marketing");

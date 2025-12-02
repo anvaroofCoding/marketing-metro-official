@@ -95,7 +95,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://88.88.150.151:9000/api/token/", {
+      const response = await fetch("https://sunnat.tm1.uz/api/token/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
